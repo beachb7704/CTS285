@@ -8,25 +8,11 @@ from calculator import *
 from user_choice import *
 
 
-def menu():
-        options = input("1. Add \n"
-             "2. Subtract \n"
-             "3. Multiply \n"
-             "4. Divide \n"
-             "5. Exit \n"
-             "Please enter your choice: ")
-        print(options)
-menu()
 
 
+def main():
+        user_input.start_menu()
 
-
-
-num1 = 20
-num2 = 2
-
-
-calculator.add(num1, num2)
-calculator.subtract(num1, num2)
-calculator.multiply(num1, num2)
-calculator.divide(num1, num2)
+if __name__ == 'main':
+        main()
+        
