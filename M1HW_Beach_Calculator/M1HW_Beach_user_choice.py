@@ -3,9 +3,28 @@
 #// Brenda Beach
 #// August 21, 2023
 
+
+# Import all of the other modules needed to run inside this module
+#=============#
+# Imports     #
+#=============#
 from M1HW_Beach_calculator import *
 
-class user_input():   
+
+
+class user_input(): 
+     
+     '''
+     This function displays the main menu to the user. 
+     
+    inputs: user input 1 thorugh 5
+    outputs: received input from the user and then runs the selection function.
+    '''  
+     
+     # Displays a menu asking the user to make a selection.
+     #=============#
+     # Start Menu  #
+     #=============#
      
      def start_menu():
           print("1. Add \n"
@@ -16,6 +35,11 @@ class user_input():
           options = input("Please enter your selection: ")
           user_input.selection(options)
      
+     
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #=========================#
+     # Repeat Add Function     #
+     #=========================#
      
      def add_repeat():
           answer = input("Would you lke to repeat or perform another function? \n"
@@ -40,6 +64,10 @@ class user_input():
      
      
      
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #==============================#
+     # Repeat Subtract Function     #
+     #==============================#
      
      def subtract_repeat():
           answer = input("Would you lke to repeat or perform another function? \n"
@@ -62,6 +90,11 @@ class user_input():
                print("Please enter a number: ")
      
      
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #==============================#
+     # Repeat Multiply Function     #
+     #==============================#
+     
      def multiply_repeat():
           answer = input("Would you lke to repeat or perform another function? \n"
                             "1. Repeat \n"
@@ -83,6 +116,10 @@ class user_input():
                print("Please enter a number: ")
      
      
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #============================#
+     # Repeat Divide Function     #
+     #============================#
      
      def divide_repeat():
           answer = input("Would you lke to repeat or perform another function? \n"
@@ -107,6 +144,10 @@ class user_input():
           
      
      
+     # This will take the selection that the user chose from the start_menu function and will run the appropriate function.
+     #=========================#
+     # Selection Function      #
+     #=========================#
      
      def selection(options):
           try:
