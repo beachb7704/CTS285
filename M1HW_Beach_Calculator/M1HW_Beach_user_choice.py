@@ -34,6 +34,15 @@ class user_input():
                "5. Exit")
           options = input("Please enter your selection: ")
           user_input.selection(options)
+          
+     
+     
+     
+     def repeat_question():
+          print("Would you lke to repeat or perform another function? \n"
+               "1. Repeat \n"
+               "2. Perform a differnt function")
+          
      
      
      # This will ask the user if they want to repeat the function they just performed or select a new function.
@@ -42,10 +51,8 @@ class user_input():
      #=========================#
      
      def add_repeat():
-          answer = input("Would you lke to repeat or perform another function? \n"
-                            "1. Repeat \n"
-                            "2. Perform a differnt function \n"
-                            "Please enter your selection: ")
+          user_input.repeat_question()
+          answer = input("Please enter your selection: ")
           try:
                answer = int(answer)
                try:
@@ -70,10 +77,8 @@ class user_input():
      #==============================#
      
      def subtract_repeat():
-          answer = input("Would you lke to repeat or perform another function? \n"
-                            "1. Repeat \n"
-                            "2. Perform a differnt function \n"
-                            "Please enter your selection: ")
+          user_input.repeat_question()
+          answer = input("Please enter your selection: ")
           try:
                answer = int(answer)
                try:
@@ -96,10 +101,8 @@ class user_input():
      #==============================#
      
      def multiply_repeat():
-          answer = input("Would you lke to repeat or perform another function? \n"
-                            "1. Repeat \n"
-                            "2. Perform a differnt function \n"
-                            "Please enter your selection: ")
+          user_input.repeat_question()
+          answer = input("Please enter your selection: ")
           try:
                answer = int(answer)
                try:
@@ -122,10 +125,9 @@ class user_input():
      #============================#
      
      def divide_repeat():
-          answer = input("Would you lke to repeat or perform another function? \n"
-                            "1. Repeat \n"
-                            "2. Perform a differnt function \n"
-                            "Please enter your selection: ")
+          user_input.repeat_question()
+          answer = input("Please enter your selection: ")
+          
           try:
                answer = int(answer)
                try:
