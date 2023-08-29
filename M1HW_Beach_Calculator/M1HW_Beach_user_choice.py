@@ -34,14 +34,37 @@ class user_input():
                "5. Exit")
           options = input("Please enter your selection: ")
           user_input.selection(options)
-          
      
      
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #==============================#
+     # Request Number1 Function     #
+     #==============================#  
+     def request_num1():
+          num1 = input("Please enter your first number: ")
+          return num1  
      
+     
+     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     #==============================#
+     # Request Number2 Function     #
+     #==============================#  
+     def request_num2():
+          num2 = input("Please enter your second number: ")
+          return num2  
+     
+     
+     # This will ask the user to select if they want to repeat function or work on different one.
+     #==============================#
+     # Repeat Question Function     #
+     #==============================#
      def repeat_question():
-          print("Would you lke to repeat or perform another function? \n"
+          answer = input("Would you lke to repeat or perform another function? \n"
                "1. Repeat \n"
-               "2. Perform a differnt function")
+               "2. Perform a differnt function \n"
+               "Please enter your selection: ")
+          return answer
+          
           
      
      
@@ -51,22 +74,24 @@ class user_input():
      #=========================#
      
      def add_repeat():
-          user_input.repeat_question()
-          answer = input("Please enter your selection: ")
+          answer = user_input.repeat_question()
           try:
                answer = int(answer)
-               try:
-                    if answer == 1:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
-                         Calculations.addition(num1, num2)
-                         user_input.add_repeat()
-                    elif answer == 2:
-                         user_input.start_menu()
-               except ValueError:
-                    print("Please enter 1 or 2.")
+               if answer == 1:
+                    num1 = user_input.request_num1()
+                    num1 = float(num1)
+                    num2 = user_input.request_num2()
+                    num2 = float(num2)
+                    Calculations.addition(num1, num2)
+                    user_input.add_repeat()
+               elif answer == 2:
+                    user_input.start_menu()
+               else:
+                    print("Please enter a 1 or 2.")
+                    user_input.add_repeat()
           except ValueError:
                print("Please enter a number: ")
+               user_input.add_repeat()
      
      
      
@@ -77,22 +102,24 @@ class user_input():
      #==============================#
      
      def subtract_repeat():
-          user_input.repeat_question()
-          answer = input("Please enter your selection: ")
+          answer = user_input.repeat_question()
           try:
                answer = int(answer)
-               try:
-                    if answer == 1:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
-                         Calculations.subtract(num1, num2)
-                         user_input.subtract_repeat()
-                    elif answer == 2:
-                         user_input.start_menu()
-               except ValueError:
-                    print("Please enter 1 or 2.")
+               if answer == 1:
+                    num1 = user_input.request_num1()
+                    num1 = float(num1)
+                    num2 = user_input.request_num2()
+                    num2 = float(num2)
+                    Calculations.subtract(num1, num2)
+                    user_input.subtract_repeat()
+               elif answer == 2:
+                    user_input.start_menu()
+               else:
+                    print("Please enter a 1 or 2.")
+                    user_input.subtract_repeat()
           except ValueError:
                print("Please enter a number: ")
+               user_input.subtract_repeat()
      
      
      # This will ask the user if they want to repeat the function they just performed or select a new function.
@@ -101,22 +128,24 @@ class user_input():
      #==============================#
      
      def multiply_repeat():
-          user_input.repeat_question()
-          answer = input("Please enter your selection: ")
+          answer = user_input.repeat_question()
           try:
                answer = int(answer)
-               try:
-                    if answer == 1:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
-                         Calculations.multiply(num1, num2)
-                         user_input.multiply_repeat()
-                    elif answer == 2:
-                         user_input.start_menu()
-               except ValueError:
-                    print("Please enter 1 or 2.")
+               if answer == 1:
+                    num1 = user_input.request_num1()
+                    num1 = float(num1)
+                    num2 = user_input.request_num2()
+                    num2 = float(num2)
+                    Calculations.multiply(num1, num2)
+                    user_input.multiply_repeat()
+               elif answer == 2:
+                    user_input.start_menu()
+               else:
+                    print("Please enter a 1 or 2.")
+                    user_input.multiply_repeat()
           except ValueError:
                print("Please enter a number: ")
+               user_input.multiply_repeat()
      
      
      # This will ask the user if they want to repeat the function they just performed or select a new function.
@@ -125,23 +154,25 @@ class user_input():
      #============================#
      
      def divide_repeat():
-          user_input.repeat_question()
-          answer = input("Please enter your selection: ")
+          answer = user_input.repeat_question()
           
           try:
                answer = int(answer)
-               try:
-                    if answer == 1:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
-                         Calculations.divide(num1, num2)
-                         user_input.divide_repeat()
-                    elif answer == 2:
-                         user_input.start_menu()
-               except ValueError:
-                    print("Please enter 1 or 2.")
+               if answer == 1:
+                    num1 = user_input.request_num1()
+                    num1 = float(num1)
+                    num2 = user_input.request_num2()
+                    num2 = float(num2)
+                    Calculations.divide(num1, num2)
+                    user_input.divide_repeat()
+               elif answer == 2:
+                    user_input.start_menu()
+               else:
+                    print("Please enter a 1 or 2.")
+                    user_input.divide_repeat()
           except ValueError:
                print("Please enter a number: ")
+               user_input.divide_repeat()
                     
           
      
@@ -156,8 +187,10 @@ class user_input():
                options = int(options)
                if options == 1:
                     try:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
+                         num1 = user_input.request_num1()
+                         num1 = float(num1)
+                         num2 = user_input.request_num2()
+                         num2 = float(num2)
                          Calculations.addition(num1, num2)
                          user_input.add_repeat()
                     except ValueError:
@@ -166,8 +199,10 @@ class user_input():
               
                elif options == 2:
                     try:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
+                         num1 = user_input.request_num1()
+                         num1 = float(num1)
+                         num2 = user_input.request_num2()
+                         num2 = float(num2)
                          Calculations.subtract(num1, num2)
                          user_input.subtract_repeat()
                     except ValueError:
@@ -176,8 +211,10 @@ class user_input():
               
                elif options == 3:
                     try:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number: "))
+                         num1 = user_input.request_num1()
+                         num1 = float(num1)
+                         num2 = user_input.request_num2()
+                         num2 = float(num2)
                          Calculations.multiply(num1, num2)
                          user_input.multiply_repeat()
                     except ValueError:
@@ -186,8 +223,10 @@ class user_input():
                
                elif options == 4:
                     try:
-                         num1 = int(input("Please enter your first number: "))
-                         num2 = int(input("Please enter your second number:"))
+                         num1 = user_input.request_num1()
+                         num1 = float(num1)
+                         num2 = user_input.request_num2()
+                         num2 = float(num2)
                          Calculations.divide(num1, num2)
                          user_input.divide_repeat()
                     except ValueError:
