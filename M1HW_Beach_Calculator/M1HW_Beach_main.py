@@ -2,7 +2,8 @@
 #// M1HW
 #// Brenda Beach
 #// August 21, 2023
-
+#As a programmer I want to create programs so that I can input student informaiton into our class database easier
+# than using Microsoft Access as our database.
 
 
 

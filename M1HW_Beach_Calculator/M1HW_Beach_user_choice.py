@@ -2,6 +2,8 @@
 #// M1HW
 #// Brenda Beach
 #// August 21, 2023
+#As a programmer I want to create programs so that I can input student informaiton into our class database easier
+# than using Microsoft Access as our database.
 
 
 # Import all of the other modules needed to run inside this module
@@ -13,6 +15,8 @@ from M1HW_Beach_calculator import *
 
 
 class user_input(): 
+     def __init__(self):
+          pass
      
      '''
      This function displays the main menu to the user. 
@@ -36,7 +40,7 @@ class user_input():
           user_input.selection(options)
      
      
-     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     # This will ask the user what their first number will be.
      #==============================#
      # Request Number1 Function     #
      #==============================#  
@@ -45,7 +49,7 @@ class user_input():
           return num1  
      
      
-     # This will ask the user if they want to repeat the function they just performed or select a new function.
+     # This will ask the user what their second number will be.
      #==============================#
      # Request Number2 Function     #
      #==============================#  
@@ -74,15 +78,10 @@ class user_input():
      #=========================#
      
      def add_repeat():
-          answer = user_input.repeat_question()
+          answer = int(user_input.repeat_question())
           try:
-               answer = int(answer)
                if answer == 1:
-                    num1 = user_input.request_num1()
-                    num1 = float(num1)
-                    num2 = user_input.request_num2()
-                    num2 = float(num2)
-                    Calculations.addition(num1, num2)
+                    Calculations.addition(float(user_input.request_num1()), float(user_input.request_num2()))
                     user_input.add_repeat()
                elif answer == 2:
                     user_input.start_menu()
@@ -102,15 +101,10 @@ class user_input():
      #==============================#
      
      def subtract_repeat():
-          answer = user_input.repeat_question()
+          answer = int(user_input.repeat_question())
           try:
-               answer = int(answer)
                if answer == 1:
-                    num1 = user_input.request_num1()
-                    num1 = float(num1)
-                    num2 = user_input.request_num2()
-                    num2 = float(num2)
-                    Calculations.subtract(num1, num2)
+                    Calculations.subtract(float(user_input.request_num1()), float(user_input.request_num2()))
                     user_input.subtract_repeat()
                elif answer == 2:
                     user_input.start_menu()
@@ -128,15 +122,10 @@ class user_input():
      #==============================#
      
      def multiply_repeat():
-          answer = user_input.repeat_question()
+          answer = int(user_input.repeat_question())
           try:
-               answer = int(answer)
                if answer == 1:
-                    num1 = user_input.request_num1()
-                    num1 = float(num1)
-                    num2 = user_input.request_num2()
-                    num2 = float(num2)
-                    Calculations.multiply(num1, num2)
+                    Calculations.multiply(float(user_input.request_num1()), float(user_input.request_num2()))
                     user_input.multiply_repeat()
                elif answer == 2:
                     user_input.start_menu()
@@ -154,16 +143,11 @@ class user_input():
      #============================#
      
      def divide_repeat():
-          answer = user_input.repeat_question()
+          answer = int(user_input.repeat_question())
           
           try:
-               answer = int(answer)
                if answer == 1:
-                    num1 = user_input.request_num1()
-                    num1 = float(num1)
-                    num2 = user_input.request_num2()
-                    num2 = float(num2)
-                    Calculations.divide(num1, num2)
+                    Calculations.divide(float(user_input.request_num1()), float(user_input.request_num2()))
                     user_input.divide_repeat()
                elif answer == 2:
                     user_input.start_menu()
@@ -187,11 +171,7 @@ class user_input():
                options = int(options)
                if options == 1:
                     try:
-                         num1 = user_input.request_num1()
-                         num1 = float(num1)
-                         num2 = user_input.request_num2()
-                         num2 = float(num2)
-                         Calculations.addition(num1, num2)
+                         Calculations.addition(float(user_input.request_num1()), float(user_input.request_num2()))
                          user_input.add_repeat()
                     except ValueError:
                          print("Please enter a valid number")
@@ -199,11 +179,7 @@ class user_input():
               
                elif options == 2:
                     try:
-                         num1 = user_input.request_num1()
-                         num1 = float(num1)
-                         num2 = user_input.request_num2()
-                         num2 = float(num2)
-                         Calculations.subtract(num1, num2)
+                         Calculations.subtract(float(user_input.request_num1()), float(user_input.request_num2()))
                          user_input.subtract_repeat()
                     except ValueError:
                          print("Please enter a valid number")
@@ -211,11 +187,7 @@ class user_input():
               
                elif options == 3:
                     try:
-                         num1 = user_input.request_num1()
-                         num1 = float(num1)
-                         num2 = user_input.request_num2()
-                         num2 = float(num2)
-                         Calculations.multiply(num1, num2)
+                         Calculations.multiply(float(user_input.request_num1()), float(user_input.request_num2()))
                          user_input.multiply_repeat()
                     except ValueError:
                          print("Please enter a valid number")
@@ -223,11 +195,7 @@ class user_input():
                
                elif options == 4:
                     try:
-                         num1 = user_input.request_num1()
-                         num1 = float(num1)
-                         num2 = user_input.request_num2()
-                         num2 = float(num2)
-                         Calculations.divide(num1, num2)
+                         Calculations.divide(float(user_input.request_num1()), float(user_input.request_num2()))
                          user_input.divide_repeat()
                     except ValueError:
                          print("Please enter a valid number")

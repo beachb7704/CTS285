@@ -1,7 +1,14 @@
-
+#// CTS 285
+#// M1HW
+#// Brenda Beach
+#// August 21, 2023
+#As a programmer I want to create programs so that I can input student informaiton into our class database easier
+# than using Microsoft Access as our database.
 
 
 class Calculations():
+    def __init__(self):
+          pass
     '''
      This function performs addition, subtraction, multiplication, and division. 
      
