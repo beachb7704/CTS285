@@ -1,65 +1,51 @@
 {% extends 'base.html' %}
 {% block content %}
-
-
-    <!doctype html>
-    <html lang="en">
-    <html>
-        <head>
-            <meta charset="UTF-8">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <!--to make the site prettier, use bootstrap framework-->
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
-            <title>DataMan</title>
             
-            <body>
-                <h1>Welcome to the DataMan Program</h1>
-                <br>
-                <h2>Here is where we will battle AntiMath and defeat him and his minions</h2>
-                <br>
-                <form action="">
-                    <!-- Headings for the form -->
-                    <div class="headingsContainer">
-                        <h3>Sign in / Register Account</h3>
-                        <p>Please sign in with your username and password</p>
-                    </div>
+<body>
+    <h1>Welcome to the DataMan Program</h1>
+    <br>
+    <h2>Here is where we will battle AntiMath and defeat him and his minions</h2>
+    <br>
+    <form action="">
+        <!-- Headings for the form -->
+        <div class="headingsContainer">
+            <h3>Sign in / Register Account</h3>
+            <p>Please sign in with your username and password</p>
+        </div>
 
-                    <!-- Main container for all inputs -->
-                    <div class="mainContainer">
-                        <!-- Username -->
-                        <label for="username">Your username</label>
-                        <!-- Make sure to put "required" for both the input fields -->
-                        <input type="text" placeholder="Enter Username" name="username" required>
+        <!-- Main container for all inputs -->
+        <div class="mainContainer">
+            <!-- Username -->
+            <label for="username">Your username</label>
+            <!-- Make sure to put "required" for both the input fields -->
+            <input type="text" placeholder="Enter Username" name="username" required>
 
-                        <br><br>
+            <br><br>
 
-                        <!-- Password -->
-                        <label for="pswrd">Your password</label>
-                        <input type="password" placeholder="Enter Password" name="pswrd" required>
+            <!-- Password -->
+            <label for="pswrd">Your password</label>
+            <input type="password" placeholder="Enter Password" name="pswrd" required>
                         
-                        <!-- sub container for the checkbox and forgot password link -->
-                        <div class="subcontainer">
-                            <br>
-                            <p class="forgotpsd"> <a href="#">Forgot Password?</a></p>
-                        </div>
-                        <br>
-                        <!-- Submit button -->
-                        <button type="submit">Login</button>
+            <!-- sub container for the checkbox and forgot password link -->
+            <div class="subcontainer">
+                <br>
+                <p class="forgotpsd"> <a href="#">Forgot Password?</a></p>
+            </div>
+            <br>
+            <!-- Submit button -->
+            <button type="submit">Login</button>
 
-                        <!-- Sign up link -->
-                        <p class="register">Don't have access yet?  <a href="#">Register here before AnitMath takes control!</a></p>
-                        <br>
-                        <br>
-                        <p class="change_psswd">Change Password?  <a href="#">Click here to change your password!</a></p>
+            <!-- Sign up link -->
+            <p class="register">Don't have access yet?  <a href="#">Register here before AnitMath takes control!</a></p>
+            <br>
+            <br>
+            <p class="change_psswd">Change Password?  <a href="#">Click here to change your password!</a></p>
         
             
-                    </div>
+        </div>
 
-                    </div>
+        </div>
                     
-                </form>
-            </body>
-        </head>
-    </html>
+    </form>
+</body>
 {% endblock %}
