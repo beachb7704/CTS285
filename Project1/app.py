@@ -8,6 +8,8 @@ from datetime import datetime
 # Below is what is typed in when trying to create the database in the terminal window
 #from app import app
 #from app import db
+# To run flask server
+# python -m flask run
 
 
 
@@ -67,10 +69,10 @@ def index():
 
 # This decorator is for the user main page
 # The <name> will be the name of the person logged in at the moment
-@app.route("/user/<name>")
-def user_home(name):
+@app.route("/top_scores")
+def top_scores():
     if request.method == "GET":
-        return render_template("user_home.html", name=name)
+        return render_template("top_scores.html")
     
 
 # This decorator is for the create user account page
