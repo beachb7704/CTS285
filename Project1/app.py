@@ -92,18 +92,29 @@ def create_acct():
             user= students(username=form.username.data, first_name=form.first_name.data, last_name=form.last_name.data, password=form.password.data)
             db.session.add(user)
             db.session.commit()
-            
-        username = form.username.data
-        first_name = form.first_name.data
-        last_name = form.last_name.data
-        password = form.password.data    
-        # This will clear the form out for the next submission
-        form.username.data = ''
-        form.first_name.data = ''
-        form.last_name.data = ''
-        form.password.data = ''
-        # This will put a flash banner across the screen if the form was submitted successfully.
-        flash("Account Created Successfully")
+            username = form.username.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
+            password = form.password.data    
+            # This will clear the form out for the next submission
+            form.username.data = ''
+            form.first_name.data = ''
+            form.last_name.data = ''
+            form.password.data = ''
+            # This will put a flash banner across the screen if the form was submitted successfully.
+            flash("Account Created Successfully")
+        else:
+            username = form.username.data
+            first_name = form.first_name.data
+            last_name = form.last_name.data
+            password = form.password.data    
+            # This will clear the form out for the next submission
+            form.username.data = ''
+            form.first_name.data = ''
+            form.last_name.data = ''
+            form.password.data = ''
+            # This will put a flash banner across the screen if the form was submitted successfully.
+            flash("This username already exists")
         
     # This will show the users in the database by the date added    
     #our_users = students.query.order_by(students.date_added)    
