@@ -5,12 +5,13 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from classes import create_account
 # Below is what is typed in when trying to create the database in the terminal window
 #from app import app
 #from app import db
 # To run flask server
 # python -m flask run
-from classes import create_account
+
 
 
 
