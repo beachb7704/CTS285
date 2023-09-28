@@ -5,7 +5,7 @@ from wtforms import StringField, SubmitField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from classes import create_account
+from classes import *
 # Below is what is typed in when trying to create the database in the terminal window
 #from app import app
 #from app import db
@@ -16,6 +16,7 @@ from classes import create_account
 
 
 # Create the Flask instance
+# Helps flask find all of the files in the directory
 app = Flask(__name__)
 
 # Add a database table. This will reference the table of the database
@@ -30,7 +31,7 @@ app.app_context().push()
 
 
     
-    
+   
 
 #########
 #CLASSES#
@@ -110,6 +111,7 @@ def create_acct():
     # This will show the users in the database by the date added    
     #our_users = students.query.order_by(students.date_added)    
     return render_template("add_acct.html", form = form, username = username, first_name = first_name, last_name = last_name, password = password)
+
 
 
 
