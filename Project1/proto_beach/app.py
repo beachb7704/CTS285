@@ -1,17 +1,17 @@
 #Import everything needed for program
-from flask import Flask, redirect, render_template, request, url_for, flash
+from flask import Flask, redirect, render_template, request, url_for, flash, request
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField
+from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from classes import *
+from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
 # Below is what is typed in when trying to create the database in the terminal window
 #from app import app
 #from app import db
 # To run flask server
 # python -m flask run
-
 
 
 
@@ -27,7 +27,10 @@ app.config['SECRET_KEY'] = "secretkey"
 
 # Initialize the database
 db = SQLAlchemy(app)
-app.app_context().push()
+#app.app_context().push()
+
+
+
 
 
     
@@ -38,7 +41,7 @@ app.app_context().push()
 #########
 
 # Create Model for adding users to database
-class students(db.Model):
+class students(db.Model, UserMixin):
     id = db.Column("id", db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     first_name = db.Column(db.String(50), nullable=False)
@@ -51,10 +54,15 @@ class students(db.Model):
 
 # Create a route decorator
 # This decorator is for the default login page
-@app.route("/")
+@app.route("/", methods=['GET', 'POST'])
 def index():
     if request.method == "GET":
         return render_template("login.html")
+
+@app.route("/user_home", methods=['GET', 'POST'])
+def home():
+    if request.method == 'GET':
+        return render_template("user_home.html")
 
 
 # This decorator is for the user main page
@@ -111,6 +119,23 @@ def create_acct():
     # This will show the users in the database by the date added    
     #our_users = students.query.order_by(students.date_added)    
     return render_template("add_acct.html", form = form, username = username, first_name = first_name, last_name = last_name, password = password)
+
+# Change the user password
+@app.route("/change_password", methods=['GET','POST'])
+def change_password():
+    username = None
+    password = None
+    form = alter_password()
+    
+    
+    
+# This will show the users in the database by the date added    
+    #our_users = students.query.order_by(students.date_added)    
+    return render_template("change_password.html", form = form, username = username, password = password)
+
+
+        
+
 
 
 
