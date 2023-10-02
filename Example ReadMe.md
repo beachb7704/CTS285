@@ -1,4 +1,4 @@
-# Project Title
+# CTS 285 DataMan
 
 One Paragraph of project description goes here
 
