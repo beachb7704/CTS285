@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% include "login_navbar.html" %}
 
 <!--for loop that will show if the account was created successfully using the flash message-->
 {% for message in get_flashed_messages()%}
@@ -9,13 +10,15 @@
     </div>
 {% endfor %}
 
-<h1>DataMan Account Creation</h1>
+<h1>DataMan Account Creation</h1> 
 <h2>This is the first step in defeating AntiMath and his minions</h2>
 
 
 
     <h1>Please fill out the information requested to create your account</h1>
     <br/>
+<!--This will create a shadow around the fields to fill out to add a user account-->
+<div class="shadow p-3 mb-5 bg body rounded">
     <form method="POST">
         {{form.hidden_tag()}}
 
@@ -37,6 +40,7 @@
         <br/>
         {{form.submit(class="btn btn-secondary")}}
     </form>
+</div>
 
 
 {% endblock %}
