@@ -17,7 +17,7 @@ from datetime import datetime
 
 
 # Create a Form Class
-class create_account(FlaskForm):
+class registration_form(FlaskForm):
     username = StringField("Enter your username", validators=[DataRequired()])
     first_name = StringField("Enter your first name", validators=[DataRequired()])
     last_name = StringField("Enter your last name", validators=[DataRequired()])
@@ -30,4 +30,7 @@ class alter_password(FlaskForm):
     password = PasswordField("Enter your password", validators=[DataRequired()])
     submit = SubmitField("Submit")
 
-    
+class login_Form(FlaskForm):
+    username = StringField(validators=[DataRequired()], render_kw={"placeholder": "Username"})
+    password = PasswordField(validators=[DataRequired()], render_kw={"placeholder": "paswrd"})
+    submit = SubmitField("Login")    
