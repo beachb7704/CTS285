@@ -1,12 +1,17 @@
 #Import everything needed for program
+
 from flask import Flask, redirect, render_template, request, url_for, flash, request
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length, ValidationError, InputRequired
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from classes import *
 from flask_login import UserMixin, login_user, LoginManager, login_required, logout_user, current_user
+from flask_bcrypt import Bcrypt
+from forms import *
+from app import *
+
+
 # Below is what is typed in when trying to create the database in the terminal window
 #from app import app
 #from app import db
@@ -14,140 +19,31 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, log
 # python -m flask run
 
 
+# Allows our app and login manager to work together and handles things when logging in
+login_manager = LoginManager()
+login_manager.session_protection = "strong"
+#login_manager.init_app(app)
+login_manager.login_view = 'login'
+login_manager.login_message_category = "info"
 
-# Create the Flask instance
-# Helps flask find all of the files in the directory
-app = Flask(__name__)
-
-# Add a database table. This will reference the table of the database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataman.db'
-
-# Create a secret key to validate the form has not been tampered with
-app.config['SECRET_KEY'] = "secretkey"
 
 # Initialize the database
-db = SQLAlchemy(app)
-#app.app_context().push()
+db = SQLAlchemy()
+
+# To help hash the password
+bcrypt = Bcrypt()
 
 
+def create_app():
+    # Create the Flask instance
+    # Helps flask find all of the files in the directory
+    app = Flask(__name__)
 
+    # Add a database table. This will reference the table of the database
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///dataman.db'
 
-
+    # Create a secret key to validate the form has not been tampered with
+    app.config['SECRET_KEY'] = "secretkey"
     
-   
+    return app
 
-#########
-#CLASSES#
-#########
-
-# Create Model for adding users to database
-class students(db.Model, UserMixin):
-    id = db.Column("id", db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False, unique=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(50), nullable=False)
-    date_added = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    
-
-
-# Create a route decorator
-# This decorator is for the default login page
-@app.route("/", methods=['GET', 'POST'])
-def index():
-    if request.method == "GET":
-        return render_template("login.html")
-
-@app.route("/user_home", methods=['GET', 'POST'])
-def home():
-    if request.method == 'GET':
-        return render_template("user_home.html")
-
-
-# This decorator is for the user main page
-# The <name> will be the name of the person logged in at the moment
-@app.route("/top_scores")
-def top_scores():
-    if request.method == "GET":
-        return render_template("top_scores.html")
-    
-
-# This decorator is for the create user account page
-# Want to set the variables the form asks to none since there is nothing yet provided by the user.
-# Going to pull up the form from the class we created earlier.
-@app.route("/add_acct", methods=['GET','POST'])
-def create_acct():
-    username = None
-    first_name = None
-    last_name = None
-    password = None
-    form = create_account()
-    
-    # Validate Form
-    if form.validate_on_submit():
-        # This will query the database to see if this username already exists
-        user = students.query.filter_by(username=form.username.data).first()
-        if user is None:
-            user= students(username=form.username.data, first_name=form.first_name.data, last_name=form.last_name.data, password=form.password.data)
-            db.session.add(user)
-            db.session.commit()
-            username = form.username.data
-            first_name = form.first_name.data
-            last_name = form.last_name.data
-            password = form.password.data    
-            # This will clear the form out for the next submission
-            form.username.data = ''
-            form.first_name.data = ''
-            form.last_name.data = ''
-            form.password.data = ''
-            # This will put a flash banner across the screen if the form was submitted successfully.
-            flash("Account Created Successfully")
-        else:
-            username = form.username.data
-            first_name = form.first_name.data
-            last_name = form.last_name.data
-            password = form.password.data    
-            # This will clear the form out for the next submission
-            form.username.data = ''
-            form.first_name.data = ''
-            form.last_name.data = ''
-            form.password.data = ''
-            # This will put a flash banner across the screen if the form was submitted successfully.
-            flash("This username already exists")
-        
-    # This will show the users in the database by the date added    
-    #our_users = students.query.order_by(students.date_added)    
-    return render_template("add_acct.html", form = form, username = username, first_name = first_name, last_name = last_name, password = password)
-
-# Change the user password
-@app.route("/change_password", methods=['GET','POST'])
-def change_password():
-    username = None
-    password = None
-    form = alter_password()
-    
-    
-    
-# This will show the users in the database by the date added    
-    #our_users = students.query.order_by(students.date_added)    
-    return render_template("change_password.html", form = form, username = username, password = password)
-
-
-        
-
-
-
-
-
-
-# This decorator is for the invalid URL pages
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template("404_error.html"), 404
-    
-
-# This decorator is for the internal server error pages
-@app.errorhandler(500)
-def page_not_found(e):
-    return render_template("500_error.html"), 500
