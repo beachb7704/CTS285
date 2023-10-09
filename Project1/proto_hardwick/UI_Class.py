@@ -23,6 +23,7 @@ class UI():
                  choice = int(input("\n-- The Adventures of Luna and Mathmaticus --\n"\
                                     "1) Answer Checker\n"\
                                     "2) Memory Bank\n"\
+                                    "3) Flash Cards\n"\
                                     "0) Exit\n"\
                                     "--------------------------------------------\n"\
                                     "Enter your choice:\t"))

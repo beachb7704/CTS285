@@ -89,6 +89,23 @@ def main():
                 # print(quest_dict[i+1])
                 print(f"\nQuestion #: {quest_dict[i+1].quest_num:<5}" + \
                       f"{quest_dict[i+1].num1} + {quest_dict[i+1].num2} = {quest_dict[i+1].ans}")
+                    
+        #========================#
+        # OPTION 3:  Flash Cards #
+        #========================#
+        
+        # If the user chooses option 1:
+        if choice == 2:
+            
+            quest_dict = {}
+            quest_num = 1
+            
+            # Print option label.
+            print("\n |========================|"\
+                  "\n | OPTION 2:  Flash Cards |"\
+                  "\n |========================|\n")
+            
+            # while cont != 2:
                 
             
         #==============================#

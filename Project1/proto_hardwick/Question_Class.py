@@ -54,10 +54,10 @@ class Question():
     def __repr__(self):
 
         return tabulate([["Question Number:", str(self.quest_num)],
-                         ["1st Number:", str(self.num1)],
-                         ["Operator:", self.operator],
-                         ["2nd Number:", str(self.num2)],
-                         ["Answer:", str(self.ans)]])
+                          ["1st Number:", str(self.num1)],
+                          ["Operator:", self.operator],
+                          ["2nd Number:", str(self.num2)],
+                          ["Answer:", str(self.ans)]])
 
 
 

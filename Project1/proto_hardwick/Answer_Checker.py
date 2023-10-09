@@ -1,6 +1,6 @@
 # The Answer Checker
-from Question_Class import Question
-# from UI_Class import UI
+# from Question_Class import Question
+from UI_Class import UI
 
 class Answer_Checker():
     
