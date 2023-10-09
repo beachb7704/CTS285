@@ -1,6 +1,7 @@
 from flask import Flask
 
 from config import Config
+from app.extensions import db
 
 
 # This is the Flask application factory function
@@ -11,7 +12,8 @@ def create_app(config_class=Config):
    
    
     # Initialize Flask extensions here
-
+    # This will import the database object from the app.extension module
+    db.init_app(app)
     
     
     # Register blueprints here
@@ -27,9 +29,9 @@ def create_app(config_class=Config):
     
     
 
-    @app.route('/test/')
-    def test_page():
-        return '<h1>Testing the Flask Application Factory Pattern</h1>'
+#    @app.route('/test/')
+#    def test_page():
+#        return '<h1>Testing the Flask Application Factory Pattern</h1>'
 
     
     

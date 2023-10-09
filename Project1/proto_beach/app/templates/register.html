@@ -1,7 +1,14 @@
 {%extends 'base.html' %}
 
 {%block content%}
-<span class='title'><h1>{% block title %} This is the register page {%endblock%}</h1></span>
+<span class='title'><h1>{% block title %} Mathmaticus Registration {%endblock%}</h1></span>
+<!--for loop that will show if the account was created successfully using the flash message-->
+{% for message in get_flashed_messages()%}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
 
 <div class='content'>
     <h2>This is the register page to create accounts</h2>
