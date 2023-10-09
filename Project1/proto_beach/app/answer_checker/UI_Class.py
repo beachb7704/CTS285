@@ -1,5 +1,5 @@
 from Question_Class import Question
-# from Answer_Checker import Answer_Checker
+from Answer_Checker import Answer_Checker
 
 # UI class
 class UI():
@@ -40,7 +40,7 @@ class UI():
              else:
                  
                  # If the user's input is an integer but not and appropriate choice: 
-                 if (choice > 3 or choice < 0):
+                 if (choice > 2 or choice < 0):
                      UI.errorMessage()
                      UI.mainMenu()
                  
@@ -51,19 +51,19 @@ class UI():
          
          return choice
      
-    # def eqn_prompt(quest_num):
+    def eqn_prompt(quest_num):
     
-    #     num1 = int(input(f"{'Enter first number:':<24}"))
-    #     operator = input(f"{'Enter math operator:':<24}")
-    #     num2 = int(input(f"{'Enter second number:':<24}"))
-    #     ans = int(input(f"{'Enter the answer:':<24}"))
+        num1 = int(input(f"{'Enter first number:':<24}"))
+        operator = input(f"{'Enter math operator:':<24}")
+        num2 = int(input(f"{'Enter second number:':<24}"))
+        ans = int(input(f"{'Enter the answer:':<24}"))
     
-    #     if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
-    #         # Create the Question object
-    #         return Question(quest_num, num1, operator, num2, ans, True)
+        if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
+            # Create the Question object
+            return Question(quest_num, num1, operator, num2, ans, True)
         
-    #     # print("The equation you entered is incorrect. Please try again.")
-    #     return Question(quest_num, num1, operator, num2, ans, False)
+        # print("The equation you entered is incorrect. Please try again.")
+        return Question(quest_num, num1, operator, num2, ans, False)
     
     # def string_parse(i, quest_dict):
     #     quest = input("Enter Question " + str(i) + ":\n")

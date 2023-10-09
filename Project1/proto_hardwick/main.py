@@ -2,13 +2,13 @@
 # Only need to work with one quest/prob at a time.
 
 # from tabulate import tabulate
-from Question_Class import Question
+# from Question_Class import Question
 from UI_Class import UI
 from Answer_Checker import Answer_Checker
 
 
 def main():
-    debug = False
+    debug = True
     # print("Mathmaticus:\n")
     
     # Initialize the sentinel value to zero.
@@ -72,7 +72,7 @@ def main():
                             false_eq = True
                     
                     else:
-                        quest = UI.eqn_prompt(quest_num)
+                        quest = Answer_Checker.eqn_prompt(quest_num)
                         # print(quest.quest_true)
                         
                     if quest.quest_true == True:
