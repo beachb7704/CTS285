@@ -2,7 +2,7 @@
 # Only need to work with one quest/prob at a time.
 
 # from tabulate import tabulate
-# from Question_Class import Question
+from Question_Class import Question
 from UI_Class import UI
 from Answer_Checker import Answer_Checker
 
@@ -95,22 +95,36 @@ def main():
         #========================#
         
         # If the user chooses option 1:
-        if choice == 2:
+        if choice == 3:
             
             
             flash_card_deck = {}
             for i in range(10):
-                question 
+                quest = Question(i+1, 2, "*", i+1, 2*(i+1), True)
+                flash_card_deck.update({i+1 : quest})
             
             quest_num = 1
-            
+            wrong = 0
             # Print option label.
             print("\n |========================|"\
                   "\n | OPTION 3:  Flash Cards |"\
                   "\n |========================|\n")
             
+            # print(flash_card_deck)
+            
             # while cont != 2:
                 
+            # consider using "for v in flash_card_deck.values:  v.quest_num, v.num1, etc.
+            for i in range(len(flash_card_deck)):
+                ans = int(input(f"\nQuestion #: {flash_card_deck[i+1].quest_num:<5}" + \
+                        f"{flash_card_deck[i+1].num1} x {flash_card_deck[i+1].num2} = "))
+                
+                if ans == flash_card_deck[i+1].ans:
+                    print("Correct!")
+                else:
+                    print("Incorrect.")
+                    wrong += 1
+                    
             
         #==============================#
         # OPTION 0:  Exit the program. #
