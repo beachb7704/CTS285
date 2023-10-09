@@ -8,7 +8,7 @@ from Answer_Checker import Answer_Checker
 
 
 def main():
-    debug = False
+    debug = True
     # print("Mathmaticus:\n")
     
     # Initialize the sentinel value to zero.
@@ -72,7 +72,7 @@ def main():
                             false_eq = True
                     
                     else:
-                        quest = UI.eqn_prompt(quest_num)
+                        quest = Answer_Checker.eqn_prompt(quest_num)
                         # print(quest.quest_true)
                         
                     if quest.quest_true == True:
@@ -89,7 +89,42 @@ def main():
                 # print(quest_dict[i+1])
                 print(f"\nQuestion #: {quest_dict[i+1].quest_num:<5}" + \
                       f"{quest_dict[i+1].num1} + {quest_dict[i+1].num2} = {quest_dict[i+1].ans}")
+                    
+        #========================#
+        # OPTION 3:  Flash Cards #
+        #========================#
+        
+        # If the user chooses option 1:
+        if choice == 3:
+            
+            
+            flash_card_deck = {}
+            for i in range(10):
+                quest = Question(i+1, 2, "*", i+1, 2*(i+1), True)
+                flash_card_deck.update({i+1 : quest})
+            
+            quest_num = 1
+            wrong = 0
+            # Print option label.
+            print("\n |========================|"\
+                  "\n | OPTION 3:  Flash Cards |"\
+                  "\n |========================|\n")
+            
+            # print(flash_card_deck)
+            
+            # while cont != 2:
                 
+            # consider using "for v in flash_card_deck.values:  v.quest_num, v.num1, etc.
+            for i in range(len(flash_card_deck)):
+                ans = int(input(f"\nQuestion #: {flash_card_deck[i+1].quest_num:<5}" + \
+                        f"{flash_card_deck[i+1].num1} x {flash_card_deck[i+1].num2} = "))
+                
+                if ans == flash_card_deck[i+1].ans:
+                    print("Correct!")
+                else:
+                    print("Incorrect.")
+                    wrong += 1
+                    
             
         #==============================#
         # OPTION 0:  Exit the program. #

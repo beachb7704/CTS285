@@ -1,11 +1,25 @@
 # The Answer Checker
 from Question_Class import Question
-# from UI_Class import UI
+from UI_Class import UI
 
 class Answer_Checker():
     
     def __init__(self):
         pass
+    
+    def eqn_prompt(quest_num):
+    
+        num1 = int(input(f"{'Enter first number:':<24}"))
+        operator = input(f"{'Enter math operator:':<24}")
+        num2 = int(input(f"{'Enter second number:':<24}"))
+        ans = int(input(f"{'Enter the answer:':<24}"))
+    
+        if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
+            # Create the Question object
+            return Question(quest_num, num1, operator, num2, ans, True)
+        
+        # print("The equation you entered is incorrect. Please try again.")
+        return Question(quest_num, num1, operator, num2, ans, False)
     
     def main(cont, debug):
         
@@ -23,25 +37,25 @@ class Answer_Checker():
 
             while false_eq == False:
                     
-                    # # Prompt the user for the input values
-                    # if debug:
-                    #     num1 = 1
-                    #     operator = "+"
-                    #     num2 = 1
-                    #     ans = 2
+                    # Prompt the user for the input values
+                    if debug:
+                        num1 = 1
+                        operator = "+"
+                        num2 = 1
+                        ans = 2
             
-                    #     if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
-                    #         # Create the Question object
-                    #         quest = Question(quest_num, num1, operator, num2,ans, True)
+                        if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
+                            # Create the Question object
+                            quest = Question(quest_num, num1, operator, num2,ans, True)
                             
-                    #     else:
-                    #         quest = False
-                    #         false_eq = True
+                        else:
+                            quest = False
+                            false_eq = True
                     
-                    # else:
-                    #     quest = UI.eqn_prompt(quest_num)
+                    else:
+                        quest = UI.eqn_prompt(quest_num)
                         
-                    quest = UI.eqn_prompt(quest_num)
+                    quest = Answer_Checker.eqn_prompt(quest_num)
                         
                     if quest.quest_true == True:
                         print(str(quest.num1) + quest.operator + str(quest.num2) + " = " + 
