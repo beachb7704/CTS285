@@ -8,11 +8,13 @@ from Answer_Checker import Answer_Checker
 
 
 def main():
-    debug = True
+    debug = False
     # print("Mathmaticus:\n")
     
     # Initialize the sentinel value to zero.
     choice = -1
+    
+    cont = -1
 
     # While the user wants to continue to use the program (the sentinel value is not equal to 0):
     while choice != 0:
@@ -20,9 +22,9 @@ def main():
         # Display the main menu to the user.
         choice = UI.mainMenu()
         
-        #================#
+        #===========================#
         # OPTION 1:  Answer Checker #
-        #================#
+        #===========================#
         
         # If the user chooses option 1:
         if choice == 1:
@@ -30,23 +32,29 @@ def main():
             # Calls the option1 function and sends the initialized cont variable value of -1.
             Answer_Checker.main(-1, debug)
                     
-        #=====================#
+        #========================#
         # OPTION 2:  Memory Bank #
-        #=====================#
+        #========================#
         
         # If the user chooses option 1:
         if choice == 2:
             
-            
             quest_dict = {}
-            
             quest_num = 1
-
-            false_eq = False
             
-            tries = 3
-
-            while false_eq == False:
+            # Print option label.
+            print("\n |========================|"\
+                  "\n | OPTION 2:  Memory Bank |"\
+                  "\n |========================|\n")
+            
+            while cont != 2:
+                    
+                false_eq = False
+                # tries = 3
+    
+                while false_eq == False:
+                        
+                    print("\nQuestion #: ", quest_num)
                     
                     # Prompt the user for the input values
                     if debug:
@@ -55,31 +63,33 @@ def main():
                         num2 = 1
                         ans = 2
             
-                        if Right_Or_Wrong.answer_checker_var(num1,operator,num2, ans):
+                        if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
                             # Create the Question object
-                            quest = Question(quest_num, num1, operator, num2,ans)
+                            quest = Question(quest_num, num1, operator, num2,ans, True)
                             
                         else:
                             quest = False
                             false_eq = True
                     
                     else:
-                        quest = UI.ans_chkr_prompt(quest_num)
-                        
-
+                        quest = UI.eqn_prompt(quest_num)
+                        # print(quest.quest_true)
                         
                     if quest.quest_true == True:
-                        print(str(quest.num1) + quest.operator + str(quest.num2) + " = " + 
-                              str(quest.ans))
-                        false_eq = True
-                        quest_dict.update({str(quest_num): quest})
+                        # print(str(quest.num1) + quest.operator + str(quest.num2) + " = " + 
+                        #       str(quest.ans))
+                        false_eq = quest.quest_true
+                        quest_dict.update({quest_num : quest})
                         quest_num += 1
-            
-            print()
+                
+                cont = UI.repeat()
+                
             for i in range(len(quest_dict)):
                 # print(i)
-                print(quest_dict[str(i+1)][i])
-                print()
+                # print(quest_dict[i+1])
+                print(f"\nQuestion #: {quest_dict[i+1].quest_num:<5}" + \
+                      f"{quest_dict[i+1].num1} + {quest_dict[i+1].num2} = {quest_dict[i+1].ans}")
+                
             
         #==============================#
         # OPTION 0:  Exit the program. #

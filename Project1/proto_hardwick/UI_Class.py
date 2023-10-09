@@ -49,6 +49,20 @@ class UI():
                      break
          
          return choice
+     
+    def eqn_prompt(quest_num):
+    
+        num1 = int(input(f"{'Enter first number:':<24}"))
+        operator = input(f"{'Enter math operator:':<24}")
+        num2 = int(input(f"{'Enter second number:':<24}"))
+        ans = int(input(f"{'Enter the answer:':<24}"))
+    
+        if Answer_Checker.right_or_wrong_var(num1,operator,num2, ans):
+            # Create the Question object
+            return Question(quest_num, num1, operator, num2, ans, True)
+        
+        # print("The equation you entered is incorrect. Please try again.")
+        return Question(quest_num, num1, operator, num2, ans, False)
     
     # def string_parse(i, quest_dict):
     #     quest = input("Enter Question " + str(i) + ":\n")
