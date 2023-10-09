@@ -97,12 +97,16 @@ def main():
         # If the user chooses option 1:
         if choice == 2:
             
-            quest_dict = {}
+            
+            flash_card_deck = {}
+            for i in range(10):
+                question 
+            
             quest_num = 1
             
             # Print option label.
             print("\n |========================|"\
-                  "\n | OPTION 2:  Flash Cards |"\
+                  "\n | OPTION 3:  Flash Cards |"\
                   "\n |========================|\n")
             
             # while cont != 2:
