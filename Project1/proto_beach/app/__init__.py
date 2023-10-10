@@ -27,6 +27,11 @@ def create_app(config_class=Config):
     from app.answer_checker import bp as answer_checker_bp
     app.register_blueprint(answer_checker_bp, url_prefix='/answer_checker')
     
+    from app.forms import bp as forms_bp
+    app.register_blueprint(forms_bp, url_prefix='/forms')
+    
+    from app.models import bp as models_bp
+    app.register_blueprint(models_bp, url_prefix='/models')
     
 
 #    @app.route('/test/')
