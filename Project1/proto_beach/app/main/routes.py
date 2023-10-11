@@ -4,7 +4,8 @@ from app.main import bp
 from app.models import students
 from app.extensions import db, bcrypt
 from config import Config
-from app.forms import reg1ster
+from app.auth import reg1ster
+from app.auth import log1n
 
 
 
@@ -15,9 +16,16 @@ def index():
     return render_template('index.html')
 
 # This is the login page route
-@bp.route('/login/')
+@bp.route('/login/', methods = ('GET', 'POST'))
 def login():
+    
+    # This will show the users in the database by the date added    
+    #our_users = students.query.order_by(students.date_added)    
     return render_template('login.html')
+
+@bp.route('/account_info/')
+def account_info():
+    return render_template('account_info.html')
 
 
 # This is the register page route
@@ -47,8 +55,8 @@ def register():
             form.first_name.data = ''
             form.last_name.data = ''
             form.password.data = ''
-            # This will put a flash banner across the screen if the form was submitted successfully.
-            flash("Account Created Successfully")
+            flash("Account created!", 'success')
+            return redirect(url_for('main.login'))                        
         else:
             username = form.username.data
             first_name = form.first_name.data
@@ -60,7 +68,7 @@ def register():
             form.last_name.data = ''
             form.password.data = ''
             # This will put a flash banner across the screen if the form was submitted successfully.
-            flash("This username already exists")
+            flash("This username already exists. Please try again.", 'warning')
         
     # This will show the users in the database by the date added    
     #our_users = students.query.order_by(students.date_added)    
@@ -77,3 +85,9 @@ def change_password():
 @bp.route('/forgot_password/')
 def forgot_password():
     return render_template('forgot_password.html')
+
+
+# This is the user home page route
+@bp.route('/user_home/')
+def user_home():
+    return render_template('user_home.html')

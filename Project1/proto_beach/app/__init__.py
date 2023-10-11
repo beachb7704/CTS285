@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_login import LoginManager
 
 from config import Config
 from app.extensions import db
@@ -8,12 +9,14 @@ from app.extensions import db
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+    
 
    
    
     # Initialize Flask extensions here
     # This will import the database object from the app.extension module
     db.init_app(app)
+    
     
     
     # Register blueprints here
@@ -27,8 +30,8 @@ def create_app(config_class=Config):
     from app.answer_checker import bp as answer_checker_bp
     app.register_blueprint(answer_checker_bp, url_prefix='/answer_checker')
     
-    from app.forms import bp as forms_bp
-    app.register_blueprint(forms_bp, url_prefix='/forms')
+    from app.auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
     
     from app.models import bp as models_bp
     app.register_blueprint(models_bp, url_prefix='/models')
@@ -41,3 +44,4 @@ def create_app(config_class=Config):
     
     
     return app
+

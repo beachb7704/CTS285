@@ -5,12 +5,13 @@ from app.main import routes
 from app.extensions import db
 from datetime import datetime
 from config import Config
+from flask_login import UserMixin
 
 #################
 # Student Table #
 #################
 # This creates the Flask-SQLAlchemy database model
-class students(db.Model):
+class students(UserMixin,db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
     first_name = db.Column(db.String(50), nullable=False)

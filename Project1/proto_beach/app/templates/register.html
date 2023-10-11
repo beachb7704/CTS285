@@ -1,43 +1,73 @@
 {%extends 'base.html' %}
-
 {%block content%}
-<span class='title'><h1>{% block title %} Mathmaticus Registration {%endblock%}</h1></span>
-<!--for loop that will show if the account was created successfully using the flash message-->
-{% for message in get_flashed_messages()%}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{message}}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-{% endfor %}
+<div class="content-section">
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Join Today to Help Mathmaticus and Luna save Llamatopia</legend>
+            <div class="form-group">
+                {{ form.username.label(class="form-control-label") }}
 
-<h1>Mathmaticus Account Creation</h1>
-<h2>This is the first step in helping Luna save Llamatopia from imminent desctruction.</h2>
-
-
-
-    <h1>Please fill out the information requested to create your account</h1>
-    <br/>
-    <form method="POST">
-        {{form.hidden_tag()}}
-
-        {{form.username.label(class="form-label")}}
-        {{form.username(class="form-control")}}
-        <br/>
-        <br/>
-        {{form.first_name.label(class="form-label")}}
-        {{form.first_name(class="form-control")}}
-        <br/>
-        <br/>
-        {{form.last_name.label(class="form-label")}}
-        {{form.last_name(class="form-control")}}
-        <br/>
-        <br/>
-        {{form.password.label(class="form-label")}}
-        {{form.password(class="form-control")}}
-        <br/>
-        <br/>
-        {{form.submit(class="btn btn-secondary")}}
+                {% if form.username.errors %}
+                    {{ form.username(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.username(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.first_name.label(class="form-control-label") }}
+                {% if form.first_name.errors %}
+                    {{ form.first_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.first_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.first_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.last_name.label(class="form-control-label") }}
+                {% if form.last_name.errors %}
+                    {{ form.last_name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.last_name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.last_name(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-control-label") }}
+                {% if form.password.errors %}
+                    {{ form.password(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.password(class="form-control form-control-lg") }}
+                {% endif %}
+            </div>
+        </fieldset>
+        <div class="form-group">
+            {{ form.submit(class="btn btn-outline-info") }}
+        </div>
     </form>
-
+</div>
+<div class="border-top pt-3">
+    <small class="text-muted">
+        Already Have An Account? <a class="ml-2" href="{{ url_for('main.login') }}">Sign In</a>
+    </small>
+</div>
 
 {% endblock %}
