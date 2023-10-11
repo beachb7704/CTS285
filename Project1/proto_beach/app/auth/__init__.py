@@ -17,7 +17,7 @@ class reg1ster(FlaskForm):
     first_name = StringField("Enter your first name", validators=[DataRequired()])
     last_name = StringField("Enter your last name", validators=[DataRequired()])
     password = PasswordField("Enter your password", validators=[DataRequired()])
-    submit = SubmitField("Resester Account")
+    submit = SubmitField("Register Account")
     
 # Create a login Form Class
 class log1n(FlaskForm):

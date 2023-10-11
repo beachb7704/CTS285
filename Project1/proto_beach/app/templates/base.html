@@ -43,6 +43,7 @@
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
+          <!--This will display a flash message if something succeeded or failed-->
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -52,6 +53,7 @@
               {% endfor %}
             {% endif %}
           {% endwith %}
+          <!--This will show the content of the individual pages that is unique to that page-->
           {% block content %}{% endblock %}
         </div>
         </div>
