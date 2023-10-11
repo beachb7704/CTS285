@@ -112,18 +112,22 @@ def main():
             
             # print(flash_card_deck)
             
-            # while cont != 2:
+            while cont != 2:
                 
-            # consider using "for v in flash_card_deck.values:  v.quest_num, v.num1, etc.
-            for i in range(len(flash_card_deck)):
-                ans = int(input(f"\nQuestion #: {flash_card_deck[i+1].quest_num:<5}" + \
-                        f"{flash_card_deck[i+1].num1} x {flash_card_deck[i+1].num2} = "))
+                # consider using "for v in flash_card_deck.values:  v.quest_num, v.num1, etc.
+                for i in range(len(flash_card_deck)):
+                    ans = int(input(f"\nQuestion #: {flash_card_deck[i+1].quest_num:<5}" + \
+                            f"{flash_card_deck[i+1].num1} x {flash_card_deck[i+1].num2} = "))
+                    
+                    if ans == flash_card_deck[i+1].ans:
+                        print("Correct!")
+                    else:
+                        print("Incorrect.")
+                        wrong += 1
+                print(f"Total Number of Questions:   {len(flash_card_deck):>5}\n" + \
+                      f"Correct:  {len(flash_card_deck)-wrong: >5})
                 
-                if ans == flash_card_deck[i+1].ans:
-                    print("Correct!")
-                else:
-                    print("Incorrect.")
-                    wrong += 1
+                cont = UI.repeat()
                     
             
         #==============================#
