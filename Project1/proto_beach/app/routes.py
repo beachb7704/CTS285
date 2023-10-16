@@ -18,8 +18,9 @@ from PIL import Image
 # This is a default webpage route for our root or welcome page.
 # The render_template returns our home.html webpage.
 @app.route("/")
-def welcome():
-    return render_template('welcome.html')
+@app.route("/home")
+def home():
+    return render_template('home.html')
 
 
 #############################
@@ -70,7 +71,7 @@ def accountinfo():
 def registration():
     # This will check to see if current user is logged in and redirect them back to the welcome page if Register link is clicked
     #if current_user.is_authenticated:
-    #    return redirect(url_for('welcome'))
+    #    return redirect(url_for('home'))
     form = Registration()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -92,14 +93,14 @@ def registration():
 def login():
     # This will check to see if current user is logged in and redirect them back to the welcome page if Login link is clicked
     #if current_user.is_authenticated:
-    #    return redirect(url_for('welcome'))
+    #    return redirect(url_for('home'))
     form = Login()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
-            return redirect (next_page) if next_page else redirect(url_for('welcome'))
+            return redirect (next_page) if next_page else redirect(url_for('home'))
         else:
             flash("Either username or password was typed in incorrectly. Please try agian.")
     return render_template('login.html', title = 'Login', form = form)
@@ -113,14 +114,25 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('welcome'))
+    return redirect(url_for('home'))
 
 
 ########################
 # Home Page Route #
 ########################
 # This is to log the user out of the current session so another user can log in. 
-@app.route("/checker")
+@app.route("/game/checker")
 @login_required
 def checker():
     return render_template('checker.html', title='Answer Checker')
+
+
+
+#########################
+# Change Password Route #
+#########################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/user_info/change_password")
+@login_required
+def change_password():
+    return render_template('change_password.html', title='Change Password')
