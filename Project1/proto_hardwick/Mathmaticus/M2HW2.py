@@ -1,3 +1,13 @@
+# flask --app M2HW2.py run --debug
+# db browser for sqlite
+# member variable object in app with there own routes
+# url_for() and url redirect to connect brenda's front end to my back end
+# url_for('veiwname', _external=True)
+# redirect to mem_bank.html and see if it saves the eqn in print
+# use user session as storage for variables
+
+# add tags for different types of questions (add, sub, multi, divide)
+
 import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
@@ -44,8 +54,42 @@ def answer_checker():
         num2 = request.form['num2']
         ans = request.form['ans']
 
-        print(math_op!="+")
-        print(math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/")
+        if not num1:
+            flash('1st number is required!')
+        elif not math_op:
+            flash('The operator is required!')
+        elif not num2:
+            flash('2nd number is required!')
+        elif not ans:
+            flash('The answer is required!')
+        elif not num1.isdigit():
+            flash('1st number is NOT an integer!')
+        elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
+            flash('Please enter an appropriate operator!')
+        elif not num2.isdigit():
+            flash('The 2nd number is NOT an integer!')
+        elif not ans.isdigit():
+            flash('The answer is NOT an integer!')
+        else:
+            true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            if true_or_false:
+                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+            else:
+                eqn = ""
+            return render_template('answer_checker.html').format(feedback = true_or_false, eqn = eqn)
+
+    return render_template('answer_checker.html').format(feedback="", eqn = "")
+
+@app.route('/mem_bank', methods=('GET', 'POST'))
+def mem_bank():
+    if request.method == 'POST':
+        num1 = request.form['num1']
+        math_op = request.form['math_op']
+        num2 = request.form['num2']
+        ans = request.form['ans']
+        
+        mem_dict = {}
+        i = 1
 
         if not num1:
             flash('1st number is required!')
@@ -64,19 +108,24 @@ def answer_checker():
         elif not ans.isdigit():
             flash('The answer is NOT an integer!')
         else:
-            # conn = get_db_connection()
-            # conn.execute('INSERT INTO posts (num1, math_op, num2, ans) VALUES (?, ?, ?, ?)',(num1, math_op, num2, ans))
-            # conn.commit()
-            # conn.close()
+            #conn = get_db_connection()
+            #conn.execute('INSERT INTO posts (num1, math_op, num2, ans) VALUES (?, ?, ?, ?)',(num1, math_op, num2, ans))
+            #conn.commit()
+            #conn.close()
             # return redirect(url_for('index'))
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
-                color = "green"
+                mem_dict.update({i:[num1,math_op,num2,ans]})
+                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
             else:
-                color = "red"
-            return render_template('answer_checker.html').format(feedback = true_or_false)
+                eqn = ""
+                
+            print(mem_dict)
+            return render_template('mem_bank.html').format(feedback = true_or_false, eqn = eqn)
 
-    return render_template('answer_checker.html').format(feedback="")
+    return render_template('mem_bank.html').format(feedback="", eqn = "")
+
+
     
 @app.route('/<int:id>/edit', methods=('GET', 'POST'))
 def edit(id):
