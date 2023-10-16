@@ -125,7 +125,7 @@ def main():
                         print("Incorrect.")
                         wrong += 1
                 print(f"Total Number of Questions:   {len(flash_card_deck):>5}\n" + \
-                      f"Correct:  {len(flash_card_deck)-wrong: >5})
+                      f"Correct:  {len(flash_card_deck)-wrong: >5}")
                 
                 cont = UI.repeat()
                     
