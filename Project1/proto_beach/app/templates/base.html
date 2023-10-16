@@ -31,7 +31,7 @@ not be any redundant code. What shows here shows on all pages.-->
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
-                    <a class="navbar-brand mr-4" href="{{url_for('checker')}}">Answer Checker</a>
+                    <a class="navbar-brand mr-4" href="#">Place Setting of no use as of now</a>
                   </div>
                   <!-- Navbar Right Side -->
                   <!--This will verify if a user is logged in and if they are, the login and register link will disappear and logout will appear.-->
@@ -70,9 +70,11 @@ not be any redundant code. What shows here shows on all pages.-->
                 <h3>Mathmatics Programs</h3>
                 <p class='text-muted'>Once you are logged in, you can click on any of these links to help Luna save Llamatopia.
                   <ul class="list-group">
-                    <li class="list-group-item list-group-item-light">Answer Checker</li>
-                    <li class="list-group-item list-group-item-light">Memory Bank</li>
-                    <li class="list-group-item list-group-item-light">User Statistics</li>
+                    <a href="{{url_for("checker")}}"><li>Answer Checker</li></a>
+                  </br>
+                  <a href="#"><li>Memory Bank</li></a>
+                  </br>
+                    <a href="#"><li>User Statisitcs</li></a>
                   </ul>
                 </p>
               </div>
