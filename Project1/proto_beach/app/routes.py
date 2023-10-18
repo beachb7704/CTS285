@@ -136,3 +136,45 @@ def checker():
 @login_required
 def change_password():
     return render_template('change_password.html', title='Change Password')
+
+
+
+#################################
+# Answer Checker Addition Route #
+#################################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/answer_check/addition")
+@login_required
+def addition():
+    return render_template('addition.html')
+
+
+#################################
+# Answer Checker Subtraction Route #
+#################################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/answer_check/subtraction")
+@login_required
+def subtraction():
+    return render_template('subtraction.html')
+
+
+#######################################
+# Answer Checker Multiplication Route #
+#######################################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/answer_check/multiply")
+@login_required
+def multiply():
+    return render_template('multiply.html')
+
+
+
+#################################
+# Answer Checker Division Route #
+#################################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/answer_check/division")
+@login_required
+def division():
+    return render_template('division.html')
