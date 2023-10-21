@@ -18,9 +18,9 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
     
-def get_post(post_id):
+def get_post(user_id):
     conn = get_db_connection()
-    post = conn.execute('SELECT * FROM posts WHERE id = ?',(post_id,)).fetchone()
+    equation = conn.execute('SELECT * FROM equations WHERE id = ?',(user_id,)).fetchone()
     conn.close()
     if post is None:
         abort(404)
@@ -32,18 +32,18 @@ app.config['SECRET_KEY'] = 'your secret key'
 @app.route('/')
 def index():
     conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM posts').fetchall()
+    equations = conn.execute('SELECT * FROM equations').fetchall()
     conn.close()
-    return render_template('index.html', posts=posts)
+    return render_template('index.html', posts=equations)
 
 @app.route('/about')
 def about():
     return render_template('about.html')
     
-@app.route('/<int:post_id>')
-def post(post_id):
-    post = get_post(post_id)
-    return render_template('post.html', post=post)
+@app.route('/<int:user_id>')
+def equation(user_id):
+    equation = get_eqn(user_id)
+    return render_template('post.html', post=equation)
     
 # previously called create.html
 @app.route('/answer_checker', methods=('GET', 'POST'))
