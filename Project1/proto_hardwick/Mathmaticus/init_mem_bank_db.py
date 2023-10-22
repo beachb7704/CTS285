@@ -3,7 +3,7 @@ import sqlite3
 connection = sqlite3.connect('memory_bank.db')
 
 
-with open('schema.sql') as f:
+with open('mem_bank_schema.sql') as f:
     connection.executescript(f.read())
 
 cur = connection.cursor()

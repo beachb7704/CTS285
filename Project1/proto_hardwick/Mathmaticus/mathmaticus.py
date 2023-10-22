@@ -12,6 +12,10 @@
 # figure out how to increment equation num in memory bank
 # figure out how to only show the equations for a specific user instead of all of the users.
 
+# flash cards
+# need user to use a drop-down menu to select the category of flash cards
+
+
 import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
@@ -160,7 +164,7 @@ def mem_bank_add():
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
 def delete(user_id, row_id):
     conn = get_db_connection()
-    
+
     cursor_obj = conn.cursor()
     eqn = cursor_obj.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
     eqn_str = str(eqn[3]) + eqn[4] + str(eqn[5]) + "=" + str(eqn[6])
