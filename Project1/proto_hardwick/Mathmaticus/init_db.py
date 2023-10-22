@@ -9,35 +9,35 @@ with open('schema.sql') as f:
 cur = connection.cursor()
 
 # User 1
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (1, 1, '+', 1, 2)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (1, 2, '+', 2, 4)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (1, 3, '+', 3, 6)
             )
 
 # User 2
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (2, 4, '+', 4, 8)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (2, 5, '+', 5, 10)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (2, 6, '+', 6, 12)
             )
 
 # User 3
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (3, 7, '+', 7, 14)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (3, 8, '+', 8, 16)
             )
-cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+cur.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
             (3, 9, '+', 9, 18)
             )
 

@@ -10,6 +10,7 @@
 
 # fix answer_checker and memory bank to allow for neg numbs
 # figure out how to increment equation num in memory bank
+# figure out how to only show the equations for a specific user instead of all of the users.
 
 import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
@@ -20,7 +21,7 @@ def get_db_connection():
     conn = sqlite3.connect('memory_bank.db')
     conn.row_factory = sqlite3.Row
     return conn
-    
+
 def get_eqnset(user_id):
     conn = get_db_connection()
     eqnset = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
@@ -101,6 +102,13 @@ def mem_bank():
     conn.close()
     return render_template('mem_bank.html', equations=eqn_db)
 
+# attempt at only displaying the equations for a specific user
+#@app.route('/<int:user_id>/mem_bank')
+#def mem_bank(user_id):
+
+    #eqn_set = get_user_id(user_id)
+#    return render_template('mem_bank.html', equations=eqn_db)
+
 @app.route('/mem_bank_add', methods=('GET', 'POST'))
 def mem_bank_add():
 
@@ -151,10 +159,13 @@ def mem_bank_add():
 # need to be able to remove a single equation from the database
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
 def delete(user_id, row_id):
-    eqn = get_user_eqn(user_id, row_id)
-    eqn_str = str(eqn['num1']) + eqn['operator'] + str(eqn['num2']) + "=" + str(eqn['ans'])
     conn = get_db_connection()
-    conn.execute('DELETE FROM posts WHERE user_id = ? AND row_id = ?', (user_id, row_id))
+    
+    cursor_obj = conn.cursor()
+    eqn = cursor_obj.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
+    eqn_str = str(eqn[3]) + eqn[4] + str(eqn[5]) + "=" + str(eqn[6])
+    
+    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (user_id, row_id,))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(eqn_str))
