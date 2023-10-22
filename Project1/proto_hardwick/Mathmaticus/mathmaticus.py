@@ -21,13 +21,20 @@ from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 from Answer_Checker import Answer_Checker
 
-def get_db_connection():
+user_id = "2"
+
+def get_mem_bank_conn():
     conn = sqlite3.connect('memory_bank.db')
     conn.row_factory = sqlite3.Row
     return conn
 
+def get_flash_cards_conn():
+    conn = sqlite3.connect('flash_cards.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 def get_eqnset(user_id):
-    conn = get_db_connection()
+    conn = get_mem_bank_conn()
     eqnset = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
     conn.close()
     if eqnset is None:
@@ -35,7 +42,7 @@ def get_eqnset(user_id):
     return eqnset
 
 def get_eqn(user_id, row_id):
-    conn = get_db_connection()
+    conn = get_mem_bank_conn()
     eqn = conn.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
     if eqn is None:
         abort(404)
@@ -52,15 +59,15 @@ def index():
 def about():
     return render_template('about.html')
     
-@app.route('/<int:user_id>')
+@app.route('/<user_id>')
 def get_user_id(user_id):
     eqn_set = get_eqnset(user_id)
-    return render_template('display_eqns.html', eqn_set=eqn_set, user_id=user_id)
+    return render_template('mem_bank.html', eqn_set=eqn_set, user_id=user_id)
 
-@app.route('/<int:user_id>/<int:row_id>')
+@app.route('/<user_id>/<int:row_id>')
 def get_user_eqn(user_id, row_id):
     eqn = get_eqn(user_id, row_id)
-    return render_template('single_eqn.html', eqn=eqn, user_id=user_id)
+    return render_template('mem_bank.html', eqn=eqn, user_id=user_id)
     
 # previously called create.html
 @app.route('/answer_checker', methods=('GET', 'POST'))
@@ -100,25 +107,32 @@ def answer_checker():
 
 @app.route('/mem_bank')
 def mem_bank():
-    conn = get_db_connection()
+    conn = get_mem_bank_conn()
     eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
     conn.close()
     return render_template('mem_bank.html', equations=eqn_db)
 
-# attempt at only displaying the equations for a specific user
-#@app.route('/<int:user_id>/mem_bank')
-#def mem_bank(user_id):
+#@app.route('/mem_bank/')
+#def mem_bank():
+#    user_id = "2"
+#    conn = get_db_connection()
+#    eqn_set = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
+#    conn.close()
+#    return render_template('mem_bank.html', equations=eqn_set)
 
-    #eqn_set = get_user_id(user_id)
-#    return render_template('mem_bank.html', equations=eqn_db)
+# attempt at only displaying the equations for a specific user
+@app.route('/mem_bank/<user_id>')
+def mem_bank_uid(user_id):
+
+    eqn_set = get_eqnset(user_id)
+    #conn = get_db_connection()
+    #eqn_set = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
+    #conn.close()
+    return render_template('mem_bank.html', equations=eqn_set)
+    #return redirect(url_for('mem_bank', equations=eqn_set))
 
 @app.route('/mem_bank_add', methods=('GET', 'POST'))
 def mem_bank_add():
-
-    conn = get_db_connection()
-    eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
-    conn.commit()
-    conn.close()
 
     if request.method == 'POST':
         num1 = request.form['num1']
@@ -147,7 +161,7 @@ def mem_bank_add():
 
             if true_or_false:
                 # add get_user_id to import the user_id
-                conn = get_db_connection()
+                conn = get_mem_bank_conn()
                 conn.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
                              (1, int(num1), math_op, int(num2), int(ans)))
                 conn.commit()
@@ -156,11 +170,25 @@ def mem_bank_add():
             else:
                 eqn = ""
             
-            return render_template('mem_bank_add.html').format(feedback = true_or_false, eqn = eqn, equations = eqn_db)
+            return render_template('mem_bank_add.html').format(feedback = true_or_false, eqn = eqn)
 
-    return render_template('mem_bank_add.html').format(feedback="", eqn = "", equations = eqn_db)
+    return render_template('mem_bank_add.html').format(feedback="", eqn = "", equations = "")
 
-# need to be able to remove a single equation from the database
+@app.route('/flash_cards', methods = ['GET','POST'])
+def flash_cards():
+
+    conn = get_flash_cards_conn()
+    categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
+    conn.close()
+
+    if request.method == 'POST':
+        cat_name = request.form['flash_card_set']
+        print(type(cat_name))
+        return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name)
+
+    return render_template('flash_cards.html', categories=categories, chosen_cat="")
+
+
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
 def delete(user_id, row_id):
     conn = get_db_connection()

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Flash Cards {% endblock %}</h1>
+
+<br>
+<form method="post">
+    <label for="flash_card_set">Choose a category:</label> 
+    <select name="flash_card_set" id="flash_card_set" required> 
+        {% for name in categories %}
+            <option value="{{ name['category'] }}">{{ name['category'] }}</option>
+        {% endfor %}
+    </select>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+<br>
+
+    <h2>{{ chosen_cat }}</h2>
+    
+{% endblock %}
