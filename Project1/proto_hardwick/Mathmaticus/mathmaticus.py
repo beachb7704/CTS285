@@ -8,44 +8,57 @@
 
 # add tags for different types of questions (add, sub, multi, divide)
 
+# fix answer_checker and memory bank to allow for neg numbs
+# figure out how to increment equation num in memory bank
+
 import sqlite3
 from flask import Flask, render_template, request, url_for, flash, redirect
 from werkzeug.exceptions import abort
 from Answer_Checker import Answer_Checker
 
 def get_db_connection():
-    conn = sqlite3.connect('database.db')
+    conn = sqlite3.connect('memory_bank.db')
     conn.row_factory = sqlite3.Row
     return conn
     
-def get_post(user_id):
+def get_eqnset(user_id):
     conn = get_db_connection()
-    equation = conn.execute('SELECT * FROM equations WHERE id = ?',(user_id,)).fetchone()
+    eqnset = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
     conn.close()
-    if post is None:
+    if eqnset is None:
         abort(404)
-    return post
+    return eqnset
+
+def get_eqn(user_id, row_id):
+    conn = get_db_connection()
+    eqn = conn.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
+    if eqn is None:
+        abort(404)
+    return eqn
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
 
 @app.route('/')
 def index():
-    conn = get_db_connection()
-    equations = conn.execute('SELECT * FROM equations').fetchall()
-    conn.close()
-    return render_template('index.html', posts=equations)
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
     return render_template('about.html')
     
 @app.route('/<int:user_id>')
-def equation(user_id):
-    equation = get_eqn(user_id)
-    return render_template('post.html', post=equation)
+def get_user_id(user_id):
+    eqn_set = get_eqnset(user_id)
+    return render_template('display_eqns.html', eqn_set=eqn_set, user_id=user_id)
+
+@app.route('/<int:user_id>/<int:row_id>')
+def get_user_eqn(user_id, row_id):
+    eqn = get_eqn(user_id, row_id)
+    return render_template('single_eqn.html', eqn=eqn, user_id=user_id)
     
 # previously called create.html
+# Answer checker is not capable for handling negative answers:  need to fix
 @app.route('/answer_checker', methods=('GET', 'POST'))
 def answer_checker():
     if request.method == 'POST':
@@ -68,6 +81,7 @@ def answer_checker():
             flash('Please enter an appropriate operator!')
         elif not num2.isdigit():
             flash('The 2nd number is NOT an integer!')
+        # Mod to allow for negative ans
         elif not ans.isdigit():
             flash('The answer is NOT an integer!')
         else:
@@ -80,16 +94,26 @@ def answer_checker():
 
     return render_template('answer_checker.html').format(feedback="", eqn = "")
 
-@app.route('/mem_bank', methods=('GET', 'POST'))
+@app.route('/mem_bank')
 def mem_bank():
+    conn = get_db_connection()
+    eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
+    conn.close()
+    return render_template('mem_bank.html', equations=eqn_db)
+
+@app.route('/mem_bank_add', methods=('GET', 'POST'))
+def mem_bank_add():
+
+    conn = get_db_connection()
+    eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
+    conn.commit()
+    conn.close()
+
     if request.method == 'POST':
         num1 = request.form['num1']
         math_op = request.form['math_op']
         num2 = request.form['num2']
         ans = request.form['ans']
-        
-        mem_dict = {}
-        i = 1
 
         if not num1:
             flash('1st number is required!')
@@ -108,52 +132,30 @@ def mem_bank():
         elif not ans.isdigit():
             flash('The answer is NOT an integer!')
         else:
-            #conn = get_db_connection()
-            #conn.execute('INSERT INTO posts (num1, math_op, num2, ans) VALUES (?, ?, ?, ?)',(num1, math_op, num2, ans))
-            #conn.commit()
-            #conn.close()
-            # return redirect(url_for('index'))
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+
             if true_or_false:
-                mem_dict.update({i:[num1,math_op,num2,ans]})
-                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+                # add get_user_id to import the user_id
+                conn = get_db_connection()
+                conn.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
+                             (1, int(num1), math_op, int(num2), int(ans)))
+                conn.commit()
+                conn.close()
             else:
                 eqn = ""
-                
-            print(mem_dict)
-            return render_template('mem_bank.html').format(feedback = true_or_false, eqn = eqn)
+            
+            return render_template('mem_bank_add.html').format(feedback = true_or_false, eqn = eqn, equations = eqn_db)
 
-    return render_template('mem_bank.html').format(feedback="", eqn = "")
+    return render_template('mem_bank_add.html').format(feedback="", eqn = "", equations = eqn_db)
 
-
-    
-@app.route('/<int:id>/edit', methods=('GET', 'POST'))
-def edit(id):
-    post = get_post(id)
-
-    if request.method == 'POST':
-        title = request.form['title']
-        content = request.form['content']
-
-        if not title:
-            flash('Title is required!')
-        else:
-            conn = get_db_connection()
-            conn.execute('UPDATE posts SET title = ?, content = ?'
-                         ' WHERE id = ?',
-                         (title, content, id))
-            conn.commit()
-            conn.close()
-            return redirect(url_for('index'))
-
-    return render_template('edit.html', post=post)
-    
-@app.route('/<int:id>/delete', methods=('POST',))
-def delete(id):
-    post = get_post(id)
+# need to be able to remove a single equation from the database
+@app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
+def delete(user_id, row_id):
+    eqn = get_user_eqn(user_id, row_id)
+    eqn_str = str(eqn['num1']) + eqn['operator'] + str(eqn['num2']) + "=" + str(eqn['ans'])
     conn = get_db_connection()
-    conn.execute('DELETE FROM posts WHERE id = ?', (id,))
+    conn.execute('DELETE FROM posts WHERE user_id = ? AND row_id = ?', (user_id, row_id))
     conn.commit()
     conn.close()
-    flash('"{}" was successfully deleted!'.format(post['title']))
-    return redirect(url_for('index'))
+    flash('"{}" was successfully deleted!'.format(eqn_str))
+    return redirect(url_for('mem_bank'))

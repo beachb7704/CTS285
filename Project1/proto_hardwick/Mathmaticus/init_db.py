@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('database.db')
+connection = sqlite3.connect('memory_bank.db')
 
 
 with open('schema.sql') as f:
@@ -8,12 +8,37 @@ with open('schema.sql') as f:
 
 cur = connection.cursor()
 
-cur.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-            ('First Post', 'Content for the first post')
+# User 1
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (1, 1, '+', 1, 2)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (1, 2, '+', 2, 4)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (1, 3, '+', 3, 6)
             )
 
-cur.execute("INSERT INTO posts (title, content) VALUES (?, ?)",
-            ('Second Post', 'Content for the second post')
+# User 2
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (2, 4, '+', 4, 8)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (2, 5, '+', 5, 10)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (2, 6, '+', 6, 12)
+            )
+
+# User 3
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (3, 7, '+', 7, 14)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (3, 8, '+', 8, 16)
+            )
+cur.execute("INSERT INTO memory_bank (user_id, eqn_num, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?, ?)",
+            (3, 9, '+', 9, 18)
             )
 
 connection.commit()

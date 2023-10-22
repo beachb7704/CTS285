@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Memory Bank (Add) {% endblock %}</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="num1">1st Number</label>
+        <input type="text" name="num1" placeholder="1st Number"
+               class="form-control" value="{{ request.form['num1'] }}">
+        </input>
+    </div>
+
+	<div class="form-group">
+        <label for="math_op">Operator</label>
+        <input type="text" name="math_op" placeholder="+, -, *, /"
+               class="form-control" value="{{ request.form['math_op'] }}">
+        </input>
+    </div>
+
+    <div class="form-group">
+        <label for="title">2nd Number</label>
+        <input type="text" name="num2" placeholder="2nd Number"
+               class="form-control" value="{{ request.form['num2'] }}">
+        </input>
+    </div>
+
+	<h2>=</h2>
+
+    <div class="form-group">
+        <label for="ans">Answer</label>
+        <input type="text" name="ans" placeholder="Answer"
+               class="form-control" value="{{ request.form['ans'] }}">
+        </input>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+<h2>{feedback}   {eqn}</h2>
+    
+{% endblock %}

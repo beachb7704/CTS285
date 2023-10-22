@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} User: {{ user_id }} {% endblock %}</h1>
+        <h2>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}={{ eqn['ans'] }}</h2>
+
+{% endblock %}
