@@ -8,7 +8,7 @@
 
 # add tags for different types of questions (add, sub, multi, divide)
 
-# fix answer_checker and memory bank to allow for neg numbs
+# move repeated code to a separate file
 # figure out how to increment equation num in memory bank
 # figure out how to only show the equations for a specific user instead of all of the users.
 
@@ -63,7 +63,6 @@ def get_user_eqn(user_id, row_id):
     return render_template('single_eqn.html', eqn=eqn, user_id=user_id)
     
 # previously called create.html
-# Answer checker is not capable for handling negative answers:  need to fix
 @app.route('/answer_checker', methods=('GET', 'POST'))
 def answer_checker():
     if request.method == 'POST':
@@ -80,14 +79,14 @@ def answer_checker():
             flash('2nd number is required!')
         elif not ans:
             flash('The answer is required!')
-        elif not num1.isdigit():
+        elif not int(num1):
             flash('1st number is NOT an integer!')
         elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
             flash('Please enter an appropriate operator!')
-        elif not num2.isdigit():
+        elif not int(num2):
             flash('The 2nd number is NOT an integer!')
         # Mod to allow for negative ans
-        elif not ans.isdigit():
+        elif not int(ans):
             flash('The answer is NOT an integer!')
         else:
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
@@ -135,13 +134,13 @@ def mem_bank_add():
             flash('2nd number is required!')
         elif not ans:
             flash('The answer is required!')
-        elif not num1.isdigit():
+        elif not int(num1):
             flash('1st number is NOT an integer!')
         elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
             flash('Please enter an appropriate operator!')
-        elif not num2.isdigit():
+        elif not int(num2):
             flash('The 2nd number is NOT an integer!')
-        elif not ans.isdigit():
+        elif not int(ans):
             flash('The answer is NOT an integer!')
         else:
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
@@ -153,6 +152,7 @@ def mem_bank_add():
                              (1, int(num1), math_op, int(num2), int(ans)))
                 conn.commit()
                 conn.close()
+                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
             else:
                 eqn = ""
             

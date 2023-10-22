@@ -53,7 +53,7 @@ class Answer_Checker():
                             false_eq = True
                     
                     else:
-                        quest = UI.eqn_prompt(quest_num)
+                        quest = Answer_Checker.eqn_prompt(quest_num)
                         
                     quest = Answer_Checker.eqn_prompt(quest_num)
                         
