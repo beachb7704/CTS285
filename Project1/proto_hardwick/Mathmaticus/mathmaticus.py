@@ -16,6 +16,7 @@
 
 # General
 # convert to sqlalchemy and wtforms
+# https://www.digitalocean.com/community/tutorials/how-to-query-tables-and-paginate-data-in-flask-sqlalchemy
 
 import os
 import datetime
