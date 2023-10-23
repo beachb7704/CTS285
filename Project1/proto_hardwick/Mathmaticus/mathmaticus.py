@@ -67,7 +67,7 @@ def get_user_id(user_id):
 @app.route('/<user_id>/<int:row_id>')
 def get_user_eqn(user_id, row_id):
     eqn = get_eqn(user_id, row_id)
-    return render_template('mem_bank.html', eqn=eqn, user_id=user_id)
+    return render_template('single_eqn.html', eqn=eqn, user_id=user_id)
     
 # previously called create.html
 @app.route('/answer_checker', methods=('GET', 'POST'))
@@ -86,14 +86,14 @@ def answer_checker():
             flash('2nd number is required!')
         elif not ans:
             flash('The answer is required!')
-        elif not int(num1):
+        elif not int(num1) and num1 != 0:
             flash('1st number is NOT an integer!')
         elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
             flash('Please enter an appropriate operator!')
-        elif not int(num2):
+        elif not int(num2) and num2 != 0:
             flash('The 2nd number is NOT an integer!')
         # Mod to allow for negative ans
-        elif not int(ans):
+        elif not int(ans) and ans != 0:
             flash('The answer is NOT an integer!')
         else:
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
@@ -110,6 +110,8 @@ def mem_bank():
     conn = get_mem_bank_conn()
     eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
     conn.close()
+    print("\n output:")
+    print(eqn_db)
     return render_template('mem_bank.html', equations=eqn_db)
 
 #@app.route('/mem_bank/')
@@ -125,9 +127,6 @@ def mem_bank():
 def mem_bank_uid(user_id):
 
     eqn_set = get_eqnset(user_id)
-    #conn = get_db_connection()
-    #eqn_set = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
-    #conn.close()
     return render_template('mem_bank.html', equations=eqn_set)
     #return redirect(url_for('mem_bank', equations=eqn_set))
 
@@ -148,13 +147,13 @@ def mem_bank_add():
             flash('2nd number is required!')
         elif not ans:
             flash('The answer is required!')
-        elif not int(num1):
+        elif not int(num1) and num1 != "0":
             flash('1st number is NOT an integer!')
         elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
             flash('Please enter an appropriate operator!')
-        elif not int(num2):
+        elif not int(num2) and num2 != "0":
             flash('The 2nd number is NOT an integer!')
-        elif not int(ans):
+        elif not int(ans) and ans != "0":
             flash('The answer is NOT an integer!')
         else:
             true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
@@ -182,16 +181,43 @@ def flash_cards():
     conn.close()
 
     if request.method == 'POST':
+        
         cat_name = request.form['flash_card_set']
-        print(type(cat_name))
-        return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name)
+        conn = get_flash_cards_conn()
+        eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(cat_name,)).fetchall()
+        conn.close()
 
-    return render_template('flash_cards.html', categories=categories, chosen_cat="")
+        #ans = request.form['ans']
+
+        for i in range(len(eqn_set)):
+            eqn = eqn_set[i]
+            flash_card_set(cat_name, eqn)
+            #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn, feedback=ans)
+        return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            #return None
+
+    return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
+
+@app.route('/flash_card_set', methods = ['GET','POST'])
+def flash_card_set(cat_name, eqn):
+
+    # print("\n output")
+    # print(eqn)
+    # print(cat_name)
+
+    # if request.method == 'POST':
+    #      ans = request.form['ans']
+    #     print("\n output:")
+    #     print(ans)
+    #     return render_template('flash_card_set.html', chosen_name=cat_name, feedback = ans)
+
+    return render_template('flash_card_set.html', chosen_name=cat_name, eqn=eqn, ans="")
+    #return redirect(url_for('flash_card_set'))
 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
 def delete(user_id, row_id):
-    conn = get_db_connection()
+    conn = get_mem_bank_conn()
 
     cursor_obj = conn.cursor()
     eqn = cursor_obj.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
@@ -202,3 +228,17 @@ def delete(user_id, row_id):
     conn.close()
     flash('"{}" was successfully deleted!'.format(eqn_str))
     return redirect(url_for('mem_bank'))
+
+@app.route('/<int:row_id>/delete', methods=('POST',))
+def delete_flash_cards(row_id):
+    conn = get_flash_cards_conn()
+
+    cursor_obj = conn.cursor()
+    eqn = cursor_obj.execute('SELECT * FROM flash_cards WHERE row_id = ?',(row_id,)).fetchone()
+    eqn_str = str(eqn[3]) + eqn[4] + str(eqn[5]) + "=" + str(eqn[6])
+    
+    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (user_id, row_id,))
+    conn.commit()
+    conn.close()
+    flash('"{}" was successfully deleted!'.format(eqn_str))
+    return redirect(url_for('flash_cards'))

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{% block title %} Flash Cards {% endblock %}</h1>
+
+
+    <h2>{{ chosen_cat }}</h2>
+    <h4>Answer: {{ ans }}</h4>
+    <h3>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}= ?</h3>
+    <form method="post">
+        <div class="form-group">
+            <input type="text" name="ans" placeholder="Answer"
+                   class="form-control" value="{{ request.form['ans'] }}">
+            </input>
+        </div>
+    
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+
+
+
+    <!---{% for eqn in equations %}
+        <h3>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}= ?</h3>
+
+        <form method="post">
+        
+            <div class="form-group">
+                <input type="text" name="ans" placeholder="Answer"
+                       class="form-control" value="{{ request.form['ans'] }}">
+                </input>
+            </div>
+        
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        <br>
+        <form action="{{ url_for('delete_flash_cards', row_id=eqn['row_id']) }}" method="POST">
+            <input type="submit" value="Delete Equation"
+                    class="btn btn-danger btn-sm"
+                    onclick="return confirm('Are you sure you want to delete this post?')">
+            <hr>
+        </form> --->
+    {% endfor %}
+    
+{% endblock %}
