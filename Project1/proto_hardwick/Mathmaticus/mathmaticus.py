@@ -228,13 +228,13 @@ def flash_cards():
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
-@app.route('/flash_card_set', methods = ('GET',))
+@app.route('/flash_card_set', methods = ['GET'])
 def flash_card_set():
     eqn = session['eqn_set'][1]
 
-    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn ans="")
+    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="")
 
-@app.route('/flash_card_set', methods = ('POST',))
+@app.route('/flash_card_set', methods = ['POST'])
 def flash_card_set():
 
     # print("\n output")
