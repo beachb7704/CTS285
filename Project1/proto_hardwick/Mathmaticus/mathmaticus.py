@@ -1,27 +1,36 @@
 # flask --app M2HW2.py run --debug
-# db browser for sqlite
 # member variable object in app with there own routes
 # url_for() and url redirect to connect brenda's front end to my back end
 # url_for('veiwname', _external=True)
-# redirect to mem_bank.html and see if it saves the eqn in print
 # use user session as storage for variables
 
 # add tags for different types of questions (add, sub, multi, divide)
 
 # move repeated code to a separate file
-# figure out how to increment equation num in memory bank
 # figure out how to only show the equations for a specific user instead of all of the users.
 
 # flash cards
-# need user to use a drop-down menu to select the category of flash cards
+# set up so that can ask one question at a time.
+# learn session and login from:  https://flask.palletsprojects.com/en/3.0.x/tutorial/views/
+# 
 
+# General
+# convert to sqlalchemy and wtforms
 
+import os
+import datetime
 import sqlite3
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template, request, url_for, flash, redirect, Blueprint, g, session
 from werkzeug.exceptions import abort
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import DateTime, func
 from Answer_Checker import Answer_Checker
 
-user_id = "2"
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# this should be in login
+# session['user_id'] = "1"
+
 
 def get_mem_bank_conn():
     conn = sqlite3.connect('memory_bank.db')
@@ -51,9 +60,39 @@ def get_eqn(user_id, row_id):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
 
+# implementing SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+        'sqlite:///' + os.path.join(basedir, 'flash_cards_alchemy.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+flash_cards_alchemy = SQLAlchemy(app)
+
+class FlashCards(flash_cards_alchemy.Model):
+    row_id = flash_cards_alchemy.Column(flash_cards_alchemy.Integer, primary_key=True)
+    created = flash_cards_alchemy.Column(DateTime(timezone=True), server_default=func.now())
+    #created_date = Column(DateTime, default=datetime.datetime.utcnow)
+    category = flash_cards_alchemy.Column(flash_cards_alchemy.String(100), nullable=False)
+    num1 = flash_cards_alchemy.Column(flash_cards_alchemy.Integer, nullable=False)
+    operator = flash_cards_alchemy.Column(flash_cards_alchemy.String(1), unique=True, nullable=False)
+    num2 = flash_cards_alchemy.Column(flash_cards_alchemy.Integer, nullable=False)
+    ans = flash_cards_alchemy.Column(flash_cards_alchemy.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<Equation ({self.category}): {self.num1}{self.operator}{self.num2}={self.ans}>'
+
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# will be done by login later
+@app.route('/setuser/<user_id>')
+def setuser(user_id: str) -> str:
+    session['user_id'] = user_id
+    return 'User value set to: ' + session['user_id']
+
+@app.route('/getuser')
+def getuser() -> str:
+    return 'User value is currently set to: ' + session['user_id']
 
 @app.route('/about')
 def about():
@@ -107,28 +146,14 @@ def answer_checker():
 
 @app.route('/mem_bank')
 def mem_bank():
-    conn = get_mem_bank_conn()
-    eqn_db = conn.execute('SELECT * FROM memory_bank').fetchall()
-    conn.close()
-    print("\n output:")
-    print(eqn_db)
-    return render_template('mem_bank.html', equations=eqn_db)
-
-#@app.route('/mem_bank/')
-#def mem_bank():
-#    user_id = "2"
-#    conn = get_db_connection()
-#    eqn_set = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
-#    conn.close()
-#    return render_template('mem_bank.html', equations=eqn_set)
-
-# attempt at only displaying the equations for a specific user
-@app.route('/mem_bank/<user_id>')
-def mem_bank_uid(user_id):
-
-    eqn_set = get_eqnset(user_id)
-    return render_template('mem_bank.html', equations=eqn_set)
-    #return redirect(url_for('mem_bank', equations=eqn_set))
+    # AN: I think we can pull user_id out of session and then use it in the below query
+    # something like user_id = session['user_id'] (see flaskr tutorial /views)
+    #conn = get_mem_bank_conn()
+    #eqn_set = conn.execute('SELECT * FROM memory_bank').fetchall()
+    #conn.close()
+    
+    eqn_set = get_eqnset(session['user_id'])
+    return render_template('mem_bank.html', equations=eqn_set, user_id=session['user_id'])
 
 @app.route('/mem_bank_add', methods=('GET', 'POST'))
 def mem_bank_add():
@@ -173,6 +198,8 @@ def mem_bank_add():
 
     return render_template('mem_bank_add.html').format(feedback="", eqn = "", equations = "")
 
+# store variable in session
+
 @app.route('/flash_cards', methods = ['GET','POST'])
 def flash_cards():
 
@@ -183,35 +210,53 @@ def flash_cards():
     if request.method == 'POST':
         
         cat_name = request.form['flash_card_set']
+        session['cat_name'] = cat_name
         conn = get_flash_cards_conn()
         eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(cat_name,)).fetchall()
         conn.close()
+        
+        session['eqn_set'] = eqn_set
 
         #ans = request.form['ans']
 
         for i in range(len(eqn_set)):
             eqn = eqn_set[i]
-            flash_card_set(cat_name, eqn)
-            #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn, feedback=ans)
-        return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            #return None
+            #flash_card_set(cat_name, eqn)
+            #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            #return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            return redirect(url_for('flash_card_set'))
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
-@app.route('/flash_card_set', methods = ['GET','POST'])
-def flash_card_set(cat_name, eqn):
+@app.route('/flash_card_set', methods = ('GET',))
+def flash_card_set():
+    eqn = session['eqn_set'][1]
+
+    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn ans="")
+
+@app.route('/flash_card_set', methods = ('POST',))
+def flash_card_set():
 
     # print("\n output")
     # print(eqn)
     # print(cat_name)
 
-    # if request.method == 'POST':
-    #      ans = request.form['ans']
-    #     print("\n output:")
-    #     print(ans)
-    #     return render_template('flash_card_set.html', chosen_name=cat_name, feedback = ans)
+    if request.method == 'POST':
+        ans = request.form['ans']
+        print("\n output:")
+        print(ans)
+        num1 = session['eqn_set'][1][1]
+        math_op = num1 = session['eqn_set'][1][2]
+        num2 = session['eqn_set'][1][3]
+        ans = session['eqn_set'][1][4]
+        true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+        if true_or_false:
+            eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+        else:
+            eqn = ""
+        return render_template('flash_card_set.html', chosen_name=session['cat_name'], feedback = 'maybe', eqn = "", ans=ans)
 
-    return render_template('flash_card_set.html', chosen_name=cat_name, eqn=eqn, ans="")
+    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn="", ans="")
     #return redirect(url_for('flash_card_set'))
 
 
