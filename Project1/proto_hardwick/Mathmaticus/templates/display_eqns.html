@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% block title %} User: {{ user_id }} {% endblock %}</h2>
+
+    {% for eqn in eqn_set %}
+        <span class="badge badge-primary">{{ eqn['created'] }}</span>
+        <p>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}={{ eqn['ans'] }}</p>
+        <hr>
+    {% endfor %}
+{% endblock %}

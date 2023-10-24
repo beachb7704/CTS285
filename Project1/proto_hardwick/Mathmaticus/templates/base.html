@@ -9,7 +9,7 @@
     <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     -->
     <!--<link rel="stylesheet" href="static/css/default/bootstrap.min.css">--> 
-    <link rel="stylesheet" href="static/css/darkly/bootstrap.min.css">  
+    <link rel="stylesheet" href="/static/css/darkly/bootstrap.min.css">  
     <title>{% block title %} {% endblock %}</title>
   </head>
   <body>
@@ -29,6 +29,12 @@
             <li class="nav-item">
               <a class="nav-link" href="{{url_for('mem_bank')}}">Memory Bank</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('mem_bank_add')}}">Memory Bank (Add)</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('flash_cards')}}">Flash Cards</a>
+            </li>
             </ul>
         </div>
     </nav>
@@ -39,7 +45,7 @@
         {% block content %} {% endblock %}
     </div>
 
-    <footer> copyrights &#169; 2022 </footer>
+    <footer> copyrights &#169; 2023 </footer>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

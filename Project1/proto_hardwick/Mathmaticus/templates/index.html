@@ -2,14 +2,22 @@
 
 {% block content %}
     <h1>{% block title %} The Adventures of Luna the Llama and Mathmaticus {% endblock %}</h1>
-    {% for post in posts %}
-        <a href="{{ url_for('post', post_id=post['id']) }}">
-            <h2>Answer Checker</h2>
-        </a>
-        <span class="badge badge-primary">{{ post['created'] }}</span>
-        <a href="{{ url_for('edit', id=post['id']) }}">
-            <span class="badge badge-warning">Edit</span>
-        </a>
-        <hr>
-    {% endfor %}
+    <a href="{{ url_for('about') }}"><h2>About</h2></a>
+    <br>
+    <hr>
+    <a href="{{ url_for('answer_checker') }}"><h2>Answer Checker</h2></a>
+    <br>
+    <hr>
+    <a href="{{ url_for('mem_bank') }}"><h2>Memory Bank</h2></a>
+    <br>
+    <hr>
+    <a href="{{ url_for('mem_bank_add') }}"><h2>Memory Bank (Add)</h2></a>
+    <br>
+    <hr>
+    <a href="{{ url_for('flash_cards') }}"><h2>Flash Cards</h2></a>
+    <br>
+    <hr>
+    <a href="{{ url_for('flash_card_set') }}"><h2>Individual Flash Card Set</h2></a>
+    <br>
+    <hr>
 {% endblock %}
