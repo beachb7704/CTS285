@@ -1,0 +1,48 @@
+To run the file, I have it set up if you run in visual studio code, type
+
+python run.py
+
+It will then run the file in debugging mode.
+
+I have created a user account called testuser
+the password for the testuser account is password
+
+We can log in, log out, look at user profile, change username, change first name and last name and change password as well as user profile picture.
+
+If a user tries to do anything that only someone with an account can do it will tell you that you need to log in. 
+
+I have started working on the answer checker game and have it where the user can input their numbers as well as operator, but I still need to figure out the back end code to the page and add the check button or cancel button.
+
+
+The sign in page forgot password link currently doesn't work. I need to go in and set the page it will go to.
+
+Memory bank and user statistics links currently do not work since I haven't created the pages for them yet.
+
+
+
+Everything below is what will need to be imported through a virtual environment.
+I am currently working on making the answer checker page but we can finally log in and play around with our account.
+I have the run.py file set so all you have to do is run the run.py file and it will start the program up and run in debug mode.
+The main file to run is the __init__.py file inside the app folder so it is pretty much app.py.
+
+
+
+
+bcrypt==4.0.1
+blinker==1.6.3
+click==8.1.7
+colorama==0.4.6
+Flask==3.0.0
+Flask-Bcrypt==1.0.1
+Flask-Login==0.6.2
+Flask-SQLAlchemy==3.1.1
+Flask-WTF==1.2.1
+greenlet==3.0.0
+itsdangerous==2.1.2
+Jinja2==3.1.2
+MarkupSafe==2.1.3
+Pillow==10.0.1
+SQLAlchemy==2.0.21
+typing_extensions==4.8.0
+Werkzeug==2.3.7
+WTForms==3.1.0
