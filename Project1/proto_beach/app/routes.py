@@ -153,26 +153,26 @@ def check_ans():
     if  operator == "plus":
         result = int(num1) + int(num2)
         if str(result) == ans:
-            return num1 + " + " + num2 + " = " + ans
+            return "Congradulations You got the question right " + num1 + " + " + num2 + " = " + ans
         else:
-            return num1 + " + " + num2 + " = " + str(result)
+            return "That's not quite right. Here is the correct answer " + num1 + " + " + num2 + " = " + str(result)
     elif operator == "minus":
         result = int(num1) - int(num2)
         if str(result) == ans:
-            return num1 + " - " + num2 + " = " + ans
+            return "Congradulations You got the question right " + num1 + " - " + num2 + " = " + ans
         else:
-            return num1 + " - " + num2 + " = " + str(result)
+            return "That's not quite right. Here is the correct answer " + num1 + " - " + num2 + " = " + str(result)
     elif operator == "multiply":
         result = int(num1) * int(num2)
         if str(result) == ans:
-            return num1 + " x " + num2 + " = " + ans
+            return "Congradulations You got the question right " + num1 + " x " + num2 + " = " + ans
         else:
-            return num1 + " x " + num2 + " = " + str(result)
+            return "That's not quite right. Here is the correct answer " + num1 + " x " + num2 + " = " + str(result)
     elif operator == "divide":
         result = int(num1) / int(num2)
         if str(result) == ans:
-            return num1 + " / " + num2 + " = " + ans
+            return "Congradulations You got the question right " + num1 + " / " + num2 + " = " + ans
         else:
-            return num1 + " / " + num2 + " = " + str(result)
+            return "That's not quite right. Here is the correct answer " + num1 + " / " + num2 + " = " + str(result)
     else:
         print("There is an error")
