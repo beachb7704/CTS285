@@ -139,42 +139,40 @@ def change_password():
 
 
 
-#################################
-# Answer Checker Addition Route #
-#################################
+###################
+# check_ans Route #
+###################
 # This is to log the user out of the current session so another user can log in. 
-@app.route("/answer_check/addition")
+@app.route("/check_ans", methods = ['POST'])
 @login_required
-def addition():
-    return render_template('addition.html')
-
-
-#################################
-# Answer Checker Subtraction Route #
-#################################
-# This is to log the user out of the current session so another user can log in. 
-@app.route("/answer_check/subtraction")
-@login_required
-def subtraction():
-    return render_template('subtraction.html')
-
-
-#######################################
-# Answer Checker Multiplication Route #
-#######################################
-# This is to log the user out of the current session so another user can log in. 
-@app.route("/answer_check/multiply")
-@login_required
-def multiply():
-    return render_template('multiply.html')
-
-
-
-#################################
-# Answer Checker Division Route #
-#################################
-# This is to log the user out of the current session so another user can log in. 
-@app.route("/answer_check/division")
-@login_required
-def division():
-    return render_template('division.html')
+def check_ans():
+    num1 = request.form["num1"]
+    operator = request.form["operator"]
+    num2 = request.form["num2"]
+    ans = request.form["ans"]
+    if  operator == "plus":
+        result = int(num1) + int(num2)
+        if str(result) == ans:
+            return num1 + " + " + num2 + " = " + ans
+        else:
+            return num1 + " + " + num2 + " = " + str(result)
+    elif operator == "minus":
+        result = int(num1) - int(num2)
+        if str(result) == ans:
+            return num1 + " - " + num2 + " = " + ans
+        else:
+            return num1 + " - " + num2 + " = " + str(result)
+    elif operator == "multiply":
+        result = int(num1) * int(num2)
+        if str(result) == ans:
+            return num1 + " x " + num2 + " = " + ans
+        else:
+            return num1 + " x " + num2 + " = " + str(result)
+    elif operator == "divide":
+        result = int(num1) / int(num2)
+        if str(result) == ans:
+            return num1 + " / " + num2 + " = " + ans
+        else:
+            return num1 + " / " + num2 + " = " + str(result)
+    else:
+        print("There is an error")
