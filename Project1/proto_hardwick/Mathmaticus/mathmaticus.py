@@ -27,23 +27,24 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime, func
 from Answer_Checker import Answer_Checker
 
+# This is used with SQLAlchemy which I have not finished integrating yet
 basedir = os.path.abspath(os.path.dirname(__file__))
-
-# this should be in login
-# session['user_id'] = "1"
 
 
 def get_mem_bank_conn():
+    """This function initializes the memory_bank.db database."""
     conn = sqlite3.connect('memory_bank.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 def get_flash_cards_conn():
+    """This function initializes the flash_cards.db database."""
     conn = sqlite3.connect('flash_cards.db')
     conn.row_factory = sqlite3.Row
     return conn
 
 def get_eqnset(user_id):
+    """This function retrieves all of the equations from the memory bank for a given user"""
     conn = get_mem_bank_conn()
     eqnset = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
     conn.close()
@@ -52,6 +53,7 @@ def get_eqnset(user_id):
     return eqnset
 
 def get_eqn(user_id, row_id):
+    """This function retrieves a specific user equation to be used by delete()."""
     conn = get_mem_bank_conn()
     eqn = conn.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
     if eqn is None:
@@ -61,7 +63,7 @@ def get_eqn(user_id, row_id):
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your secret key'
 
-# implementing SQLAlchemy
+# implementing SQLAlchemy (not finished)
 app.config['SQLALCHEMY_DATABASE_URI'] =\
         'sqlite:///' + os.path.join(basedir, 'flash_cards_alchemy.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -85,12 +87,16 @@ class FlashCards(flash_cards_alchemy.Model):
 def index():
     return render_template('index.html')
 
+# this allows me to set the user_id without having to login
 # will be done by login later
+# until I get this streamlined => add link to main page to remind me to set user at start
+# print user id to landing page
 @app.route('/setuser/<user_id>')
 def setuser(user_id: str) -> str:
     session['user_id'] = user_id
     return 'User value set to: ' + session['user_id']
 
+# this displays the user_id
 @app.route('/getuser')
 def getuser() -> str:
     return 'User value is currently set to: ' + session['user_id']
@@ -145,6 +151,7 @@ def answer_checker():
 
     return render_template('answer_checker.html').format(feedback="", eqn = "")
 
+# Make sure to set the user_id before trying to use the Memory Bank
 @app.route('/mem_bank')
 def mem_bank():
     # AN: I think we can pull user_id out of session and then use it in the below query
@@ -207,6 +214,7 @@ def flash_cards():
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
+    
 
     if request.method == 'POST':
         
@@ -216,49 +224,59 @@ def flash_cards():
         eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(cat_name,)).fetchall()
         conn.close()
         
-        session['eqn_set'] = eqn_set
+        # TypeError: Object of type Row is not JSON serializable
+        # session['eqn_set'] = eqn_set
 
         #ans = request.form['ans']
 
         for i in range(len(eqn_set)):
             eqn = eqn_set[i]
+            
+            # TypeError: Object of type Row is not JSON serializable
+            # This error was occurring until I added the "[1]" to eqn to make eqn[1]
+            # The session variables cannot store non JSON serializable data like is stored
+            #   in the database. Therefore, must convert to understandable data before 
+            #   storing in the session variables.
+            session['eqn'] = eqn[1]
             #flash_card_set(cat_name, eqn)
             #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            #return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            return redirect(url_for('flash_card_set'))
+            return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            #return redirect(url_for('flash_card_set'))
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
-@app.route('/flash_card_set', methods = ['GET'])
+@app.route('/flash_card_set', methods = ['GET','POST'])
 def flash_card_set():
     eqn = session['eqn_set'][1]
 
-    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="")
+    # return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="")
+    return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
 
-@app.route('/flash_card_set', methods = ['POST'])
-def flash_card_set():
+# trying to write a function for 'GET' and a different case for 'POST'
+# @app.route('/flash_card_set', methods = ['POST'])
+# def flash_card_set():
 
-    # print("\n output")
-    # print(eqn)
-    # print(cat_name)
+#     # print("\n output")
+#     # print(eqn)
+#     # print(cat_name)
 
-    if request.method == 'POST':
-        ans = request.form['ans']
-        print("\n output:")
-        print(ans)
-        num1 = session['eqn_set'][1][1]
-        math_op = num1 = session['eqn_set'][1][2]
-        num2 = session['eqn_set'][1][3]
-        ans = session['eqn_set'][1][4]
-        true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
-        if true_or_false:
-            eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
-        else:
-            eqn = ""
-        return render_template('flash_card_set.html', chosen_name=session['cat_name'], feedback = 'maybe', eqn = "", ans=ans)
+#     if request.method == 'POST':
+#         ans = request.form['ans']
+#         print("\n output:")
+#         print(ans)
+#         num1 = session['eqn_set'][1][1]
+#         math_op = num1 = session['eqn_set'][1][2]
+#         num2 = session['eqn_set'][1][3]
+#         ans = session['eqn_set'][1][4]
+#         true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+#         if true_or_false:
+#             eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+#         else:
+#             eqn = ""
+#         return render_template('flash_card_set.html', chosen_name=session['cat_name'], feedback = 'maybe', eqn = "", ans=ans)
 
-    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn="", ans="")
-    #return redirect(url_for('flash_card_set'))
+#     return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn="", ans="")
+#     #return redirect(url_for('flash_card_set'))
 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
