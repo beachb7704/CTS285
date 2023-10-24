@@ -1,23 +1,29 @@
 <!--This is using template inheritance-->
 {% extends "base.html" %}
 {% block base %}
-        <h1>Please Help Mathmaticus save Llamatopia</h1>
+<div class="content-section">
+    <form method="POST" action="">
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Welcome to Mathmaticus. Luna needs our help to save Llamatopia from destruction.</legend>
+        </fieldset>
         <div class="content">
             <br>   
         <body>
             <br>
-            <h2>If you feel you have what it </h2>
-            <h2>takes to help me help</h2>
-            <h2> Luna, click on the link below and we</h2>
-            <h2> can get started.</h2>
+            <h2>Please login so we can work on a solution together.</h2>
             <br>
             <nav>
             <a href="login">Click here if you feel you have what it takes!</a>
             <br>
             <br>
-            <p class="register">Don't have access yet? <a href="/register">Register here to help Luna save Llamatopia!</a></p>
+            <p class="register">Don't have access yet? <a href="/register">Create your account now!</a></p>
             </nav>
         </body>
+        </div>
+    </form>
+
+</div>
+
 
 {% endblock base %}            
 
