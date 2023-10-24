@@ -3,20 +3,40 @@
 <div class="content-section">
     <form method="POST" action="">
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Welcome to Answer Checker. Please select which type of math you would like to try.</legend>
+            <legend class="border-bottom mb-4">Welcome to Answer Checker.</legend>
         </fieldset>
-        <medium class="text-muted ml-2">
-            <a href="{{url_for('addition')}}">Addition</a>
-        </medium>
-        <medium class="text-muted ml-2">
-            <a href="{{url_for('subtraction')}}">Subtraction</a>
-        </medium>
-        <medium class="text-muted ml-2">
-            <a href="{{url_for('multiply')}}">Multiplication</a>
-        </medium>
-        <medium class="text-muted ml-2">
-            <a href="{{url_for('division')}}">Division</a>
-        </medium>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Please type in the math problem you would like to have checked.</legend>
+        </fieldset>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Press Check to see if you answered your problem correctly.</legend>
+        </fieldset>
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="number" name="number1" class="form-control" placeholder="First Number">
+            </div>
+            <div "col-lg-3 col-md-4">
+                <select id="selectOperation" class="form-control">
+                    <option Selected>Select..</option>
+                    <option>+</option>
+                    <option>-</option>
+                    <option>X</option>
+                    <option>/</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="number" name="number2"class="form-control" placeholder="Second Number">
+            </div>
+            <div class="col-lg-1">
+                <div class="text-center">=</div>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="number" name="answer"class="form-control" placeholder="Answer">
+            </div>
+        </div>
     </form>
 </div>
 {% endblock base %}
