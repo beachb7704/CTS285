@@ -133,7 +133,6 @@ def checker():
 #########################
 # This is to log the user out of the current session so another user can log in. 
 @app.route("/user_info/change_password")
-@login_required
 def change_password():
     return render_template('change_password.html', title='Change Password')
 
@@ -175,4 +174,4 @@ def check_ans():
         else:
             return "That's not quite right. Here is the correct answer " + num1 + " / " + num2 + " = " + str(result)
     else:
-        print("There is an error")
+        return "There is an error"
