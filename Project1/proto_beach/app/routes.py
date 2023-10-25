@@ -7,7 +7,7 @@ from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 from PIL import Image
-from Answer_Checker import Answer_Checker
+from app import Answer_Checker
 
 
 
@@ -119,9 +119,9 @@ def logout():
     return redirect(url_for('home'))
 
 
-########################
-# Home Page Route #
-########################
+#######################
+# Game Checker Route  #
+#######################
 # This is to log the user out of the current session so another user can log in. 
 @app.route("/game/checker")
 @login_required
@@ -144,7 +144,7 @@ def change_password():
 # check_ans Route #
 ###################
 # This is to log the user out of the current session so another user can log in. 
-@app.route("/check_ans", methods = ['GET','POST'])
+@app.route("/game/check_ans", methods = ['GET','POST'])
 @login_required
 def check_ans():
     if request.method == 'POST':
@@ -171,12 +171,12 @@ def check_ans():
         elif not int(ans) and ans != 0:
             flash('The answer is NOT an integer!')
         else:
-            true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
             else:
                 eqn = ""
-            return render_template('checker.html').format(feedback = true_or_false, eqn = eqn)
+            return render_template('answer_check.html').format(feedback = true_or_false, eqn = eqn)
 
     return render_template('checker.html').format(feedback="", eqn = "")
 

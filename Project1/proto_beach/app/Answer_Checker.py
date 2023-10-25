@@ -1,5 +1,5 @@
 # The Answer Checker
-from Question_Class import Question
+from app.Question_Class import Question
 
 class Answer_Checker():
     
