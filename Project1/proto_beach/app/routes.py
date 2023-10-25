@@ -142,36 +142,39 @@ def change_password():
 # check_ans Route #
 ###################
 # This is to log the user out of the current session so another user can log in. 
-@app.route("/check_ans", methods = ['POST'])
+@app.route("/check_ans", methods = ['GET','POST'])
 @login_required
 def check_ans():
-    num1 = request.form["num1"]
-    operator = request.form["operator"]
-    num2 = request.form["num2"]
-    ans = request.form["ans"]
-    if  operator == "plus":
-        result = int(num1) + int(num2)
-        if str(result) == ans:
-            return "Congradulations You got the question right " + num1 + " + " + num2 + " = " + ans
+    if request.method == 'POST':
+        num1 = request.form['num1']
+        operator = request.form['operator']
+        num2 = request.form['num2']
+        ans = request.form['ans']
+
+        if not num1:
+            flash('1st number is required!')
+        elif not operator:
+            flash('The operator is required!')
+        elif not num2:
+            flash('2nd number is required!')
+        elif not ans:
+            flash('The answer is required!')
+        elif not int(num1) and num1 != 0:
+            flash('1st number is NOT an integer!')
+        elif operator != "+" and operator != "-" and operator != "*" and operator != "/":
+            flash('Please enter an appropriate operator!')
+        elif not int(num2) and num2 != 0:
+            flash('The 2nd number is NOT an integer!')
+        # Mod to allow for negative ans
+        elif not int(ans) and ans != 0:
+            flash('The answer is NOT an integer!')
         else:
-            return "That's not quite right. Here is the correct answer " + num1 + " + " + num2 + " = " + str(result)
-    elif operator == "minus":
-        result = int(num1) - int(num2)
-        if str(result) == ans:
-            return "Congradulations You got the question right " + num1 + " - " + num2 + " = " + ans
-        else:
-            return "That's not quite right. Here is the correct answer " + num1 + " - " + num2 + " = " + str(result)
-    elif operator == "multiply":
-        result = int(num1) * int(num2)
-        if str(result) == ans:
-            return "Congradulations You got the question right " + num1 + " x " + num2 + " = " + ans
-        else:
-            return "That's not quite right. Here is the correct answer " + num1 + " x " + num2 + " = " + str(result)
-    elif operator == "divide":
-        result = int(num1) / int(num2)
-        if str(result) == ans:
-            return "Congradulations You got the question right " + num1 + " / " + num2 + " = " + ans
-        else:
-            return "That's not quite right. Here is the correct answer " + num1 + " / " + num2 + " = " + str(result)
-    else:
-        return "There is an error"
+            true_or_false = check_ans.right_or_wrong_var(num1,operator,num2,int(ans))
+            if true_or_false:
+                eqn = num1 + " " + operator + " " + num2 + " = " + ans 
+            else:
+                eqn = ""
+            return render_template('checker.html').format(feedback = true_or_false, eqn = eqn)
+
+    return render_template('checker.html').format(feedback="", eqn = "")
+
