@@ -7,6 +7,8 @@ from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 import secrets
 from PIL import Image
+from Answer_Checker import Answer_Checker
+
 
 
 # Routes are what we create to move to other webpages.
@@ -147,13 +149,13 @@ def change_password():
 def check_ans():
     if request.method == 'POST':
         num1 = request.form['num1']
-        operator = request.form['operator']
+        math_op = request.form['math_op']
         num2 = request.form['num2']
         ans = request.form['ans']
 
         if not num1:
             flash('1st number is required!')
-        elif not operator:
+        elif not math_op:
             flash('The operator is required!')
         elif not num2:
             flash('2nd number is required!')
@@ -161,7 +163,7 @@ def check_ans():
             flash('The answer is required!')
         elif not int(num1) and num1 != 0:
             flash('1st number is NOT an integer!')
-        elif operator != "+" and operator != "-" and operator != "*" and operator != "/":
+        elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
             flash('Please enter an appropriate operator!')
         elif not int(num2) and num2 != 0:
             flash('The 2nd number is NOT an integer!')
@@ -169,9 +171,9 @@ def check_ans():
         elif not int(ans) and ans != 0:
             flash('The answer is NOT an integer!')
         else:
-            true_or_false = check_ans.right_or_wrong_var(num1,operator,num2,int(ans))
+            true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
-                eqn = num1 + " " + operator + " " + num2 + " = " + ans 
+                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
             else:
                 eqn = ""
             return render_template('checker.html').format(feedback = true_or_false, eqn = eqn)
