@@ -122,7 +122,7 @@ def logout():
 #######################
 # Game Checker Route  #
 #######################
-# This is to log the user out of the current session so another user can log in. 
+# This will send the user to the Answer Checker game 
 @app.route("/game/checker")
 @login_required
 def checker():
@@ -133,7 +133,7 @@ def checker():
 #########################
 # Change Password Route #
 #########################
-# This is to log the user out of the current session so another user can log in. 
+# This is to allow the user to change their password.
 @app.route("/user_info/change_password")
 def change_password():
     return render_template('change_password.html', title='Change Password')
@@ -143,7 +143,7 @@ def change_password():
 ###################
 # check_ans Route #
 ###################
-# This is to log the user out of the current session so another user can log in. 
+# This is the route to gather the info from the user then to determine if the equation they wrote is right or wrong.
 @app.route("/game/check_ans", methods = ['GET','POST'])
 @login_required
 def check_ans():
@@ -176,7 +176,7 @@ def check_ans():
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
             else:
                 eqn = ""
-            return render_template('answer_check.html').format(feedback = true_or_false, eqn = eqn)
+            return render_template('checker.html').format(feedback = true_or_false, eqn = eqn)
 
     return render_template('checker.html').format(feedback="", eqn = "")
 

@@ -31,3 +31,4 @@ class Answer_Checker():
             # print("\nThe equation you entered was incorrect.  Please try again.\n")
             # self.correct = False
             return False
+        
