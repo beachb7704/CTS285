@@ -180,3 +180,24 @@ def check_ans():
 
     return render_template('checker.html').format(feedback="", eqn = "")
 
+
+
+####################
+# Flash Card Route #
+####################
+# This will send the user to the Flash Card game 
+@app.route("/game/flash_cards")
+@login_required
+def flash_cards():
+    return render_template('flash_cards.html', title='Flash Cards')
+
+
+
+#####################
+# Memory Bank Route #
+#####################
+# This will send the user to the Memory Bank Game 
+@app.route("/game/memory_bank")
+@login_required
+def memory_bank():
+    return render_template('mem_bank.html', title='Memory Bank')
