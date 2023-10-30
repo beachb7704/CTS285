@@ -18,6 +18,10 @@
 # convert to sqlalchemy and wtforms
 # https://www.digitalocean.com/community/tutorials/how-to-query-tables-and-paginate-data-in-flask-sqlalchemy
 
+# freeze venv modules
+# pip freeze -l > requirements.txt
+# pip freeze --user > requirements.txt
+
 import os
 # import datetime
 import sqlite3
@@ -234,35 +238,32 @@ def flash_cards():
         # for i in range(len(eqn_set)):
         for i in range(1):
             eqn = eqn_set[i]
-            # print("\n output:")
-            # print(eqn[2])
-            
-            true_or_false = Answer_Checker.right_or_wrong_var(eqn[3], eqn[4], eqn[5], eqn[6])
-            if true_or_false:
-                quest = Question(eqn[3], eqn[4], eqn[5], eqn[6], True)
-            else:
-                quest = ""            
-            print(quest)
+            session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
+                  
+            # print(quest)
             # eqn type:  <class 'sqlite3.Row'>
-            print("eqn type: ",type(eqn))
+            # print("eqn type: ",type(eqn))
             # eqn[3] type:  <class 'int'>
             # eqn[4] type:  <class 'str'>
-            print("eqn[4] type: ", type(eqn[4]))
+            # print("eqn[4] type: ", type(eqn[4]))
             # quest type:  <class 'Question_Class.Question'>
-            print("quest type: ",type(quest))
+            # print("quest type: ",type(quest))
             # session['quest'] = quest
-            session['num1'] = eqn[3]
-            session['operator'] = eqn[4]
-            session['num2'] = eqn[5]
-            session['ans'] = eqn[6]
-            session['eqn'] = [eqn[3], eqn[4], eqn[5], eqn[6]]
-            print(str(session['num1']) + session['operator'] + str(session['num2']) + "=" + str(session['ans']))
-            print(str(session['eqn'][0]) + session['eqn'][1] + str(session['eqn'][2]) + "=" + str(session['eqn'][3]))
-            print(str(quest.num1) + quest.operator + str(quest.num2) + "=" + str(quest.ans))
+            # session['num1'] = eqn[3]
+            # session['operator'] = eqn[4]
+            # session['num2'] = eqn[5]
+            # session['ans'] = eqn[6]
+            # session['eqn'] = [eqn[3], eqn[4], eqn[5], eqn[6]]
+            # print(str(session['num1']) + session['operator'] + str(session['num2']) + "=" + str(session['ans']))
+            # print(str(session['eqn'][0]) + session['eqn'][1] + str(session['eqn'][2]) + "=" + str(session['eqn'][3]))
+            # print(str(quest.num1) + quest.operator + str(quest.num2) + "=" + str(quest.ans))
             
             # print(session['quest'])
-            
-            
+            # print("\n session['eqn']",session['eqn'])
+            # print(type(session['eqn']))
+            # temp_eqn = json.loads(session['eqn'])
+            # print("\n temp_eqn(json.loads)",temp_eqn)
+            # print(type(temp_eqn))
             # TypeError: Object of type Row is not JSON serializable
             # This error was occurring until I added the "[1]" to eqn to make eqn[1]
             # The session variables cannot store non JSON serializable data like is stored
@@ -273,53 +274,36 @@ def flash_cards():
             
             #flash_card_set(cat_name, eqn)
             #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            
-            return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            # return redirect(url_for('flash_card_set'))
+            # return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            return redirect(url_for('flash_card_set'))
             # return redirect(request.url)
             # return redirect(request.referrer)
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
 # @app.route('/flash_card_set', methods = ['GET','POST'])
-@app.route('/flash_card_set', methods = ['POST'])
+@app.route('/flash_card_set', methods = ['GET','POST'])
 def flash_card_set():
-    # pass in json or cat_name and parse or json.loads
-    
     
     print('\n flash_card_set:')
-    eqn = session['eqn']
-    ans = request.form['ans']
-    # return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="")
-    # return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
-    # return redirect(url_for('flash_card_set'))
-    return redirect(url_for('flash_cards'))
-
-# trying to write a function for 'GET' and a different case for 'POST'
-# @app.route('/flash_card_set', methods = ['POST'])
-# def flash_card_set():
-
-#     # print("\n output")
-#     # print(eqn)
-#     # print(cat_name)
-
-#     if request.method == 'POST':
-#         ans = request.form['ans']
-#         print("\n output:")
-#         print(ans)
-#         num1 = session['eqn_set'][1][1]
-#         math_op = num1 = session['eqn_set'][1][2]
-#         num2 = session['eqn_set'][1][3]
-#         ans = session['eqn_set'][1][4]
-#         true_or_false = Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
-#         if true_or_false:
-#             eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
-#         else:
-#             eqn = ""
-#         return render_template('flash_card_set.html', chosen_name=session['cat_name'], feedback = 'maybe', eqn = "", ans=ans)
-
-#     return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn="", ans="")
-#     #return redirect(url_for('flash_card_set'))
+    eqn = json.loads(session['eqn'])
+    print('type(eqn): ', type(eqn))
+    print(str(eqn['num1']) + eqn['math_op'] + str(eqn['num2']) + "=" + str(eqn['ans']))
+    print(session['cat_name'])
+    
+    if request.method == 'POST':
+        ans = request.form['ans']
+        
+        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['math_op'], eqn['num2'], eqn['ans'])
+        if not true_or_false:
+            eqn = ""
+              
+        return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans=ans, T_F=true_or_false)
+        # return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
+        # return redirect(url_for('flash_card_set'))
+        # return redirect(url_for('flash_cards'))
+        
+    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="", T_F="")
 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
