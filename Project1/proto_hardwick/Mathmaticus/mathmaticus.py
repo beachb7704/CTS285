@@ -19,13 +19,15 @@
 # https://www.digitalocean.com/community/tutorials/how-to-query-tables-and-paginate-data-in-flask-sqlalchemy
 
 import os
-import datetime
+# import datetime
 import sqlite3
+import json
 from flask import Flask, render_template, request, url_for, flash, redirect, Blueprint, g, session
 from werkzeug.exceptions import abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime, func
 from Answer_Checker import Answer_Checker
+from Question_Class import Question
 
 # This is used with SQLAlchemy which I have not finished integrating yet
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -156,9 +158,6 @@ def answer_checker():
 def mem_bank():
     # AN: I think we can pull user_id out of session and then use it in the below query
     # something like user_id = session['user_id'] (see flaskr tutorial /views)
-    #conn = get_mem_bank_conn()
-    #eqn_set = conn.execute('SELECT * FROM memory_bank').fetchall()
-    #conn.close()
     
     eqn_set = get_eqnset(session['user_id'])
     return render_template('mem_bank.html', equations=eqn_set, user_id=session['user_id'])
@@ -214,7 +213,6 @@ def flash_cards():
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
-    
 
     if request.method == 'POST':
         
@@ -228,29 +226,74 @@ def flash_cards():
         # session['eqn_set'] = eqn_set
 
         #ans = request.form['ans']
+        
+        # https://docs.python.org/3/library/json.html
+        # json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])
+        # json.loads('["foo", {"bar":["baz", null, 1.0, 2]}]')
 
-        for i in range(len(eqn_set)):
+        # for i in range(len(eqn_set)):
+        for i in range(1):
             eqn = eqn_set[i]
+            # print("\n output:")
+            # print(eqn[2])
+            
+            true_or_false = Answer_Checker.right_or_wrong_var(eqn[3], eqn[4], eqn[5], eqn[6])
+            if true_or_false:
+                quest = Question(eqn[3], eqn[4], eqn[5], eqn[6], True)
+            else:
+                quest = ""            
+            print(quest)
+            # eqn type:  <class 'sqlite3.Row'>
+            print("eqn type: ",type(eqn))
+            # eqn[3] type:  <class 'int'>
+            # eqn[4] type:  <class 'str'>
+            print("eqn[4] type: ", type(eqn[4]))
+            # quest type:  <class 'Question_Class.Question'>
+            print("quest type: ",type(quest))
+            # session['quest'] = quest
+            session['num1'] = eqn[3]
+            session['operator'] = eqn[4]
+            session['num2'] = eqn[5]
+            session['ans'] = eqn[6]
+            session['eqn'] = [eqn[3], eqn[4], eqn[5], eqn[6]]
+            print(str(session['num1']) + session['operator'] + str(session['num2']) + "=" + str(session['ans']))
+            print(str(session['eqn'][0]) + session['eqn'][1] + str(session['eqn'][2]) + "=" + str(session['eqn'][3]))
+            print(str(quest.num1) + quest.operator + str(quest.num2) + "=" + str(quest.ans))
+            
+            # print(session['quest'])
+            
             
             # TypeError: Object of type Row is not JSON serializable
             # This error was occurring until I added the "[1]" to eqn to make eqn[1]
             # The session variables cannot store non JSON serializable data like is stored
             #   in the database. Therefore, must convert to understandable data before 
             #   storing in the session variables.
-            session['eqn'] = eqn[1]
+            # session['eqn'] = eqn
+            # print(session['eqn'])
+            
             #flash_card_set(cat_name, eqn)
             #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+            
             return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            #return redirect(url_for('flash_card_set'))
+            # return redirect(url_for('flash_card_set'))
+            # return redirect(request.url)
+            # return redirect(request.referrer)
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
-@app.route('/flash_card_set', methods = ['GET','POST'])
+# @app.route('/flash_card_set', methods = ['GET','POST'])
+@app.route('/flash_card_set', methods = ['POST'])
 def flash_card_set():
-    eqn = session['eqn_set'][1]
-
+    # pass in json or cat_name and parse or json.loads
+    
+    
+    print('\n flash_card_set:')
+    eqn = session['eqn']
+    ans = request.form['ans']
     # return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="")
-    return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
+    # return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
+    # return redirect(url_for('flash_card_set'))
+    return redirect(url_for('flash_cards'))
 
 # trying to write a function for 'GET' and a different case for 'POST'
 # @app.route('/flash_card_set', methods = ['POST'])
