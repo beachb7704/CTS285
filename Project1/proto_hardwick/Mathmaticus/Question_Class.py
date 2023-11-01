@@ -2,13 +2,30 @@ from tabulate import tabulate
 
 class Question():
 
-    def __init__(self, num1, operator, num2, ans, T_F):
+    # def __init__(self, num1, operator, num2, ans, T_F):
 
-        self.num1 = int(num1)
-        self.operator = operator
-        self.num2 = int(num2)
-        self.ans = int(ans)
-        self.quest_true = bool(T_F)
+    #     self.num1 = int(num1)
+    #     self.operator = operator
+    #     self.num2 = int(num2)
+    #     self.ans = int(ans)
+    #     self.quest_true = bool(T_F)
+        
+    def __init__(self, row):
+        """ init a question from a sqlite row object"""
+        #session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
+        #self.id = row["id"]
+        #self.name = row["name"]
+        #self.age = row["age"]
+        # row numbers (these are majic numbers so we use constants)
+        NUM1 = 3
+        MATH_OP = 4
+        NUM2 = 5
+        ANS = 6
+        self.num1 = row[NUM1]
+        self.operator = row[MATH_OP]
+        self.num2 = row[NUM2]
+        self.ans = row[ANS]
+        #self.quest_true = #something
 
     # Getters    
     def get_num1(self):
