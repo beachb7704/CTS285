@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, ValidationError
 from app.models import User
 
@@ -60,3 +60,19 @@ class UpdateAccount(FlaskForm):
                 raise ValidationError('This username already exists. Please select another one.')
 
 
+
+####################
+# Memory Bank Form #
+####################
+# This is creating the form for student registration
+class Memory_Bank(FlaskForm):
+    # Username will be used as the label for the html.
+    memory_id = IntegerField('Username', validators=[DataRequired()])
+    user_id = IntegerField('user_id', validators=[DataRequired()])
+    num1 = IntegerField('num1', validators=[DataRequired()])
+    math_op = StringField('math_op', validators=[DataRequired()])
+    num2 = IntegerField('num2', validators=[DataRequired()])
+    ans = IntegerField('ans', validators=[DataRequired()])
+    submit = SubmitField('Insert to Memory')
+    
+    
