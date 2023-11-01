@@ -1,20 +1,59 @@
 {% extends 'base.html' %}
+{% block base %}
+<div class="content-section">
+    <form method="POST" action="{{url_for('mem_bank_ans')}}">
+        <!--<h1>Current User {{mem_user}}</h1>-->
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Welcome to the Memory Bank.</legend>
+        </fieldset>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Please enter the equations you would like to store for later..</legend>
+        </fieldset>
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Press Submit to commit your answers to memory.</legend>
+        </fieldset>
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="text" name="num1" class="form-control" placeholder="First Number" required>
+            </div>
+            <div "col-lg-3 col-md-4">
+                <select id="selectOperation" class="form-control" name="math_op" required>
+                    <option value="">Select..</option>
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                    <option value="*">X</option>
+                    <option value="/">/</option>
+                </select>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="text" name="num2"class="form-control" placeholder="Second Number" required>
+            </div>
+            <div class="col-lg-1">
+                <div class="text-center">=</div>
+            </div>
+            <div class="col-lg-3 col-md-4">
+                <!--Change the type to text if python code changes from string to int-->
+                <input type="text" name="ans"class="form-control" placeholder="Answer" required>
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-lg-3 col-md-4">
+                <input type="Submit" value = "Submit" class="btn btn-primary">
+            </div>
 
-{% block content %}
-    <h1>{% block title %} Memory Bank {% endblock %}</h1>
-    <h3> You are logged in as:  {{ user_id }}</h3> 
-    <a href="{{ url_for('mem_bank_add') }}"><h5>Add equations to memory bank</h5></a>
-    <br>
+            <div class="col-lg-3 col-md-4">
+                <div>{{note}}</div>
+            </div>
 
-    {% for eqn in equations %}
-        <h2>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}={{ eqn['ans'] }}</h2>
-        <form action="{{ url_for('delete', user_id=eqn['user_id'], row_id=eqn['row_id']) }}" method="POST">
-            <input type="submit" value="Delete Equation"
-                    class="btn btn-danger btn-sm"
-                    onclick="return confirm('Are you sure you want to delete this post?')">
-        </form>
-        <hr>
-    {% endfor %}
-
-    
-{% endblock %}
+            <div class="col-lg-3 col-md-4">
+                <div>{{eqn}}</div>
+            </div>
+            <!--div class="col-lg-3 col-md-4">
+                <input type="Submit" value = "Cancel" class="btn btn-primary">
+            </div-->
+        </div>
+    </form>
+</div>
+{% endblock base %}

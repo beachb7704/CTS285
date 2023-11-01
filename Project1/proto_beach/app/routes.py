@@ -1,13 +1,21 @@
 # Importing flask
 import os
-from flask import Flask, render_template, url_for, flash, redirect, request
-from app.forms import Registration, Login, UpdateAccount
-from app.models import User, Student_Statistics
+from flask import Flask, render_template, url_for, flash, redirect, request, session
+from app.forms import Registration, Login, UpdateAccount, Memory_Bank
+from app.models import User, Student_Statistics, Memory
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
 import secrets
+import sqlite3
 from PIL import Image
 from app import Answer_Checker
+
+
+def get_mem_bank_conn():
+    """This function initializes the memory_bank.db database."""
+    conn = sqlite3.connect('instance/mathmaticus.db')
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 
@@ -99,8 +107,18 @@ def login():
     form = Login()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+        #userid = User.query.filter_by(id=id.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
+            # Set session to user_id
+            conn = get_mem_bank_conn()
+            userid = conn.execute('SELECT * FROM user WHERE username = ?',(str(user),)).fetchall()
+            conn.close()
+            print(userid)
+            session['userid'] = str(user)
+            #print(session['userid'])
+            #print(type(session['userid']))
+            #print(User.id)
             next_page = request.args.get('next')
             return redirect (next_page) if next_page else redirect(url_for('home'))
         else:
@@ -152,7 +170,7 @@ def check_ans():
         math_op = request.form['math_op']
         num2 = request.form['num2']
         ans = request.form['ans']
-
+        note = ""
         if not num1:
             flash('1st number is required!')
         elif not math_op:
@@ -174,11 +192,13 @@ def check_ans():
             true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+                note = "You guessed the correct answer."
             else:
                 eqn = ""
-            return render_template('checker.html').format(feedback = true_or_false, eqn = eqn)
+                note = "I'm sorry that is not the correct answer for this equation."
+            return render_template('checker.html', feedback = true_or_false, eqn = eqn, note = note)
 
-    return render_template('checker.html').format(feedback="", eqn = "")
+    return render_template('checker.html', feedback="", eqn="", note = note)
 
 
 
@@ -197,7 +217,76 @@ def flash_cards():
 # Memory Bank Route #
 #####################
 # This will send the user to the Memory Bank Game 
-@app.route("/game/memory_bank")
+@app.route("/memory_bank")
 @login_required
 def memory_bank():
     return render_template('mem_bank.html', title='Memory Bank')
+
+
+############################
+# Memory Bank answer route #
+############################
+# This is the route that will store the equations into the database
+@app.route("/mem_bank_ans", methods = ['GET','POST'])
+@login_required
+def mem_bank_ans():
+    if request.method == 'POST':
+        mem_user = current_user.id
+        num1 = request.form['num1']
+        math_op = request.form['math_op']
+        num2 = request.form['num2']
+        ans = request.form['ans']
+        note = ""
+
+        if not num1:
+            flash('1st number is required!')
+        elif not math_op:
+            flash('The operator is required!')
+        elif not num2:
+            flash('2nd number is required!')
+        elif not ans:
+            flash('The answer is required!')
+        elif not int(num1) and num1 != 0:
+            flash('1st number is NOT an integer!')
+        elif math_op != "+" and math_op != "-" and math_op != "*" and math_op != "/":
+            flash('Please enter an appropriate operator!')
+        elif not int(num2) and num2 != 0:
+            flash('The 2nd number is NOT an integer!')
+        # Mod to allow for negative ans
+        elif not int(ans) and ans != 0:
+            flash('The answer is NOT an integer!')
+        else:
+            # Work on adding the userid, question and answer to database here!!!!!
+            true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            if true_or_false:
+                conn = get_mem_bank_conn()
+                conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
+                             (session['userid'], int(num1), math_op, int(num2), int(ans)))
+                conn.commit()
+                conn.close()
+                eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
+                note = "Your answer has been added to the memory bank successfully."
+            else:
+                eqn = ""
+                note = "I'm sorry, Your answer was not added successfully."
+            return render_template('mem_bank.html', feedback = true_or_false, eqn = eqn, note = note)
+
+    return render_template('mem_bank.html', feedback="", eqn="", note = note)
+
+
+#####################################
+# Memory Bank Add to Database Route #
+#####################################
+# This is creating the route for adding the equations to the database for the memory bank.
+@app.route("/memory_bank", methods = ['GET', 'POST'])
+@login_required
+def memory_bank_insert():
+    form = Memory_Bank()
+    if form.validate_on_submit():
+        equation = Memory(userid=form.user_id.data, num1=form.num1.data, math_op=form.math_op.data, num2=form.num2.data, ans=form.ans.data)
+        db.session.add(equation)
+        db.session.commit()
+        flash(f'The equation has been added successfully to the Memory Bank!', 'success')
+        #return redirect(url_for('login'))
+    return render_template('mem_bank.html', title = 'Memory Bank', form = form)
+
