@@ -242,10 +242,10 @@ def flash_cards():
             #session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
             # we're now having the question class init from a row, then dumping it as json
             print("\n flash cards")
-            quest = Question(eqn)
-            print(quest)
-            print("eqn dictionary internals are = ", quest.__dict__)
-            session['eqn'] = json.dumps(quest.__dict__)
+            eqn_q = Question(eqn)
+            print(eqn_q)
+            print("eqn dictionary internals are = ", eqn_q.__dict__)
+            session['eqn'] = json.dumps(eqn_q.__dict__)
                   
             # print(quest)
             # eqn type:  <class 'sqlite3.Row'>
