@@ -238,7 +238,14 @@ def flash_cards():
         # for i in range(len(eqn_set)):
         for i in range(1):
             eqn = eqn_set[i]
-            session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
+            # add from_row to question class  
+            #session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
+            # we're now having the question class init from a row, then dumping it as json
+            print("\n flash cards")
+            quest = Question(eqn)
+            print(quest)
+            print("eqn dictionary internals are = ", quest.__dict__)
+            session['eqn'] = json.dumps(quest.__dict__)
                   
             # print(quest)
             # eqn type:  <class 'sqlite3.Row'>
@@ -288,13 +295,14 @@ def flash_card_set():
     print('\n flash_card_set:')
     eqn = json.loads(session['eqn'])
     print('type(eqn): ', type(eqn))
-    print(str(eqn['num1']) + eqn['math_op'] + str(eqn['num2']) + "=" + str(eqn['ans']))
+    print("eqn = ", eqn)
+    print(str(eqn['num1']) + eqn['operator'] + str(eqn['num2']) + "=" + str(eqn['ans']))
     print(session['cat_name'])
     
     if request.method == 'POST':
         ans = request.form['ans']
         
-        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['math_op'], eqn['num2'], eqn['ans'])
+        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], eqn['ans'])
         if not true_or_false:
             eqn = ""
               
