@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     image_file = db.Column(db.String(20), nullable = False, default = 'default.jpg')
     #User can have many memory bank inputs
     memory_bank_input = db.relationship('Memory', backref='add_memory')
-    #session['userid'] = id
+    
        
     def __repr__(self):
         return f"{self.username}"
@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
 class Student_Statistics(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     # This is creating the foreign key that will connect to the first table created.
-    user_id = db.Column(db.String(50), db.ForeignKey('user.id'), nullable = False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     correct_questions = db.Column(db.Integer, nullable = False)
     wrong_questions = db.Column(db.Integer, nullable = False)
     total_questions = db.Column(db.Integer, nullable = False)
