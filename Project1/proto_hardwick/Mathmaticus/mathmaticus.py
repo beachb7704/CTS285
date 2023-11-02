@@ -238,46 +238,12 @@ def flash_cards():
         # for i in range(len(eqn_set)):
         for i in range(1):
             eqn = eqn_set[i]
-            # add from_row to question class  
-            #session['eqn'] = json.dumps({"num1": eqn[3], "math_op": eqn[4], "num2": eqn[5], "ans": eqn[6]})
             # we're now having the question class init from a row, then dumping it as json
-            print("\n flash cards")
-            quest = Question(eqn)
-            print(quest)
-            print("eqn dictionary internals are = ", quest.__dict__)
-            session['eqn'] = json.dumps(quest.__dict__)
-                  
-            # print(quest)
-            # eqn type:  <class 'sqlite3.Row'>
-            # print("eqn type: ",type(eqn))
-            # eqn[3] type:  <class 'int'>
-            # eqn[4] type:  <class 'str'>
-            # print("eqn[4] type: ", type(eqn[4]))
-            # quest type:  <class 'Question_Class.Question'>
-            # print("quest type: ",type(quest))
-            # session['quest'] = quest
-            # session['num1'] = eqn[3]
-            # session['operator'] = eqn[4]
-            # session['num2'] = eqn[5]
-            # session['ans'] = eqn[6]
-            # session['eqn'] = [eqn[3], eqn[4], eqn[5], eqn[6]]
-            # print(str(session['num1']) + session['operator'] + str(session['num2']) + "=" + str(session['ans']))
-            # print(str(session['eqn'][0]) + session['eqn'][1] + str(session['eqn'][2]) + "=" + str(session['eqn'][3]))
-            # print(str(quest.num1) + quest.operator + str(quest.num2) + "=" + str(quest.ans))
-            
-            # print(session['quest'])
-            # print("\n session['eqn']",session['eqn'])
-            # print(type(session['eqn']))
-            # temp_eqn = json.loads(session['eqn'])
-            # print("\n temp_eqn(json.loads)",temp_eqn)
-            # print(type(temp_eqn))
-            # TypeError: Object of type Row is not JSON serializable
-            # This error was occurring until I added the "[1]" to eqn to make eqn[1]
-            # The session variables cannot store non JSON serializable data like is stored
-            #   in the database. Therefore, must convert to understandable data before 
-            #   storing in the session variables.
-            # session['eqn'] = eqn
-            # print(session['eqn'])
+            # print("\n flash cards")
+            eqn_q = Question(eqn)
+            # print(eqn_q)
+            # print("eqn dictionary internals are = ", eqn_q.__dict__)
+            session['eqn'] = json.dumps(eqn_q.__dict__)            
             
             #flash_card_set(cat_name, eqn)
             #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
@@ -292,26 +258,28 @@ def flash_cards():
 @app.route('/flash_card_set', methods = ['GET','POST'])
 def flash_card_set():
     
-    print('\n flash_card_set:')
     eqn = json.loads(session['eqn'])
-    print('type(eqn): ', type(eqn))
-    print("eqn = ", eqn)
-    print(str(eqn['num1']) + eqn['operator'] + str(eqn['num2']) + "=" + str(eqn['ans']))
-    print(session['cat_name'])
+    # print('\n flash_card_set:')
+    # print('type(eqn): ', type(eqn))
+    # print("eqn = ", eqn)
+    # print(str(eqn['num1']) + eqn['operator'] + str(eqn['num2']) + "=" + str(eqn['ans']))
+    # print(session['cat_name'])
     
     if request.method == 'POST':
         ans = request.form['ans']
         
-        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], eqn['ans'])
-        if not true_or_false:
-            eqn = ""
+        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(ans))
+        if true_or_false:
+            eql_sign = "="
+        else:
+            eql_sign = "&ne;"
               
-        return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans=ans, T_F=true_or_false)
+        return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn, ans=ans, T_F=true_or_false, eql_sign=eql_sign)
         # return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
         # return redirect(url_for('flash_card_set'))
         # return redirect(url_for('flash_cards'))
         
-    return render_template('flash_card_set.html', chosen_name=session['cat_name'], eqn=eqn, ans="", T_F="")
+    return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn, ans="", T_F="")
 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))

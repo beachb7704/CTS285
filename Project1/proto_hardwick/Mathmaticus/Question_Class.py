@@ -1,14 +1,13 @@
 from tabulate import tabulate
 
 class Question():
+    def __init__(self, num1, operator, num2, ans, T_F):
 
-    # def __init__(self, num1, operator, num2, ans, T_F):
-
-    #     self.num1 = int(num1)
-    #     self.operator = operator
-    #     self.num2 = int(num2)
-    #     self.ans = int(ans)
-    #     self.quest_true = bool(T_F)
+        self.num1 = int(num1)
+        self.operator = operator
+        self.num2 = int(num2)
+        self.ans = int(ans)
+        self.quest_true = bool(T_F)
         
     def __init__(self, row):
         """ init a question from a sqlite row object"""

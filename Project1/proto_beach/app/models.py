@@ -24,6 +24,7 @@ class User(db.Model, UserMixin):
     #User can have many memory bank inputs
     memory_bank_input = db.relationship('Memory', backref='add_memory')
     
+    
        
     def __repr__(self):
         return f"{self.username}"
