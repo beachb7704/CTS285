@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>{% block title %} Flash Cards {% endblock %}</h1>
 
 <br>
 <form method="post">
+    <h1>{% block title %} Flash Cards {% endblock %}</h1>
     <label for="flash_card_set">Choose a category:</label> 
     <select name="flash_card_set" id="flash_card_set" required> 
         {% for name in categories %}

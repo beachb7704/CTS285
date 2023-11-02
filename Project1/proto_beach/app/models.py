@@ -1,12 +1,15 @@
 from app import db, login_manager
 from flask_login import UserMixin
-from flask import session
+from flask import session, flash
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import DateTime, func
 
 
 # Creating a user loader for the login manager to work
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
 
 
 ##############
@@ -63,3 +66,21 @@ class Memory(db.Model, UserMixin):
     num2 = db.Column(db.Integer, nullable = False)
     ans = db.Column(db.Integer, nullable = False)
        
+
+
+#####################
+# Flash Cards Model #
+#####################
+
+class FlashCards(db.Model):
+    row_id = db.Column(db.Integer, primary_key=True)
+    created = db.Column(DateTime(timezone=True), server_default=func.now())
+    #created_date = Column(DateTime, default=datetime.datetime.utcnow)
+    category = db.Column(db.String(100), nullable=False)
+    num1 = db.Column(db.Integer, nullable=False)
+    operator = db.Column(db.String(1), unique=True, nullable=False)
+    num2 = db.Column(db.Integer, nullable=False)
+    ans = db.Column(db.Integer, nullable=False)
+
+    def __repr__(self):
+        return f'<Equation ({self.category}): {self.num1}{self.operator}{self.num2}={self.ans}>'
