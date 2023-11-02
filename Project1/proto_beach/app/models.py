@@ -63,5 +63,3 @@ class Memory(db.Model, UserMixin):
     num2 = db.Column(db.Integer, nullable = False)
     ans = db.Column(db.Integer, nullable = False)
        
-    #def __repr__(self):
-    #    return f"{self.user_id}"
