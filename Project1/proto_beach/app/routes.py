@@ -17,6 +17,19 @@ def get_mem_bank_conn():
     conn.row_factory = sqlite3.Row
     return conn
 
+# This will save the picture the user uploads with a random hex number
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext
+    picture_path = os.path.join(app.root_path, 'static/images', picture_fn)
+    # This will resize the picture to make it 125 X 125 in size
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    i.save(picture_path)
+    
+    return picture_fn
 
 
 # Routes are what we create to move to other webpages.
@@ -33,22 +46,12 @@ def home():
     return render_template('home.html')
 
 
+
+
+ 
 #############################
 # Account Information Route #
-#############################
-# This will save the picture the user uploads with a random hex number
-def save_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/images', picture_fn)
-    # This will resize the picture to make it 125 X 125 in size
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-    i.save(picture_path)
-    
-    return picture_fn
+############################# 
     
 # The render_template returns our accountinfo.html webpage.
 @app.route("/accountinfo", methods = ['GET', 'POST'])
@@ -79,9 +82,6 @@ def accountinfo():
 # This is creating the route for the registratin page to link the registration form
 @app.route("/registration", methods = ['GET', 'POST'])
 def registration():
-    # This will check to see if current user is logged in and redirect them back to the welcome page if Register link is clicked
-    #if current_user.is_authenticated:
-    #    return redirect(url_for('home'))
     form = Registration()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -107,18 +107,9 @@ def login():
     form = Login()
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-        #userid = User.query.filter_by(id=id.data).first()
+        #studentid = User.query.filter_by(id=id.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            # Set session to user_id
-            conn = get_mem_bank_conn()
-            userid = conn.execute('SELECT * FROM user WHERE username = ?',(str(user),)).fetchall()
-            conn.close()
-            print(userid)
-            session['userid'] = str(user)
-            #print(session['userid'])
-            #print(type(session['userid']))
-            #print(User.id)
             next_page = request.args.get('next')
             return redirect (next_page) if next_page else redirect(url_for('home'))
         else:
@@ -230,8 +221,8 @@ def memory_bank():
 @app.route("/mem_bank_ans", methods = ['GET','POST'])
 @login_required
 def mem_bank_ans():
+    studentid = current_user.id
     if request.method == 'POST':
-        mem_user = current_user.id
         num1 = request.form['num1']
         math_op = request.form['math_op']
         num2 = request.form['num2']
@@ -261,7 +252,7 @@ def mem_bank_ans():
             if true_or_false:
                 conn = get_mem_bank_conn()
                 conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
-                             (session['userid'], int(num1), math_op, int(num2), int(ans)))
+                             (studentid, int(num1), math_op, int(num2), int(ans)))
                 conn.commit()
                 conn.close()
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
@@ -272,21 +263,3 @@ def mem_bank_ans():
             return render_template('mem_bank.html', feedback = true_or_false, eqn = eqn, note = note)
 
     return render_template('mem_bank.html', feedback="", eqn="", note = note)
-
-
-#####################################
-# Memory Bank Add to Database Route #
-#####################################
-# This is creating the route for adding the equations to the database for the memory bank.
-@app.route("/memory_bank", methods = ['GET', 'POST'])
-@login_required
-def memory_bank_insert():
-    form = Memory_Bank()
-    if form.validate_on_submit():
-        equation = Memory(userid=form.user_id.data, num1=form.num1.data, math_op=form.math_op.data, num2=form.num2.data, ans=form.ans.data)
-        db.session.add(equation)
-        db.session.commit()
-        flash(f'The equation has been added successfully to the Memory Bank!', 'success')
-        #return redirect(url_for('login'))
-    return render_template('mem_bank.html', title = 'Memory Bank', form = form)
-
