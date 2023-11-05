@@ -254,7 +254,7 @@ def flash_cards():
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
-# @app.route('/flash_card_set', methods = ['GET','POST'])
+# Move for loop from flash_cards to flash_card_set or use i+=1 to iterate through each equation
 @app.route('/flash_card_set', methods = ['GET','POST'])
 def flash_card_set():
     
