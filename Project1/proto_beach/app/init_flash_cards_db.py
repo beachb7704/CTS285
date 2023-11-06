@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('mathmaticus.db')
+connection = sqlite3.connect('instance/mathmaticus.db')
 
 
 with open('flash_cards_schema.sql') as f:
