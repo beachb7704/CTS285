@@ -26,7 +26,7 @@ import os
 # import datetime
 import sqlite3
 import json
-from flask import Flask, render_template, request, url_for, flash, redirect, Blueprint, g, session
+from flask import Flask, render_template, request, url_for, flash, redirect, Blueprint, g, session, jsonify
 from werkzeug.exceptions import abort
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import DateTime, func
@@ -223,9 +223,9 @@ def flash_cards():
         # cat_name = request.form['flash_card_set']
         # session['cat_name'] = cat_name
         session['cat_name'] = request.form['flash_card_set']
-        conn = get_flash_cards_conn()
-        eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
-        conn.close()
+        # conn = get_flash_cards_conn()
+        # eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
+        # conn.close()
         
         # TypeError: Object of type Row is not JSON serializable
         # session['eqn_set'] = eqn_set
@@ -236,37 +236,44 @@ def flash_cards():
         # json.dumps(['foo', {'bar': ('baz', None, 1.0, 2)}])
         # json.loads('["foo", {"bar":["baz", null, 1.0, 2]}]')
 
-        for i in range(len(eqn_set)):
-        # for i in range(1):
-            eqn = eqn_set[i]
-        #     # we're now having the question class init from a row, then dumping it as json
-        #     # print("\n flash cards")
-            eqn_q = Question(eqn)
-        #     # print(eqn_q)
-        #     # print("eqn dictionary internals are = ", eqn_q.__dict__)
-            session['eqn'] = json.dumps(eqn_q.__dict__)            
+        # for i in range(len(eqn_set)):
+        # # for i in range(1):
+        #     eqn = eqn_set[i]
+        # #     # we're now having the question class init from a row, then dumping it as json
+        # #     # print("\n flash cards")
+        #     eqn_q = Question(eqn)
+        # #     # print(eqn_q)
+        # #     # print("eqn dictionary internals are = ", eqn_q.__dict__)
+        #     session['eqn'] = json.dumps(eqn_q.__dict__)            
             
-        #     #flash_card_set(cat_name, eqn)
-        #     #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-        #     # return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
-            return redirect(url_for('flash_card_set'))
+        # #     #flash_card_set(cat_name, eqn)
+        # #     #return render_template('flash_cards.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+        # #     # return render_template('flash_card_set.html', categories=categories, chosen_cat=cat_name, eqn=eqn)
+        #     return redirect(url_for('flash_card_set'))
             # return redirect(request.url)
             # return redirect(request.referrer)
-        
-        # return redirect(url_for('flash_card_set'))
+        session['i'] = 0
+        session['true_or_false'] = ""
+        session['eql_sign'] = ""
+        session['ans'] = ""
+        return redirect(url_for('flash_card_set'))
 
     return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
 
 # Move for loop from flash_cards to flash_card_set or use i+=1 to iterate through each equation
 # look at this: https://stackoverflow.com/questions/73067978/flask-how-to-update-values-on-a-web-page
+# could Ajax work?
+# jsonify{{''}}
 @app.route('/flash_card_set', methods = ['GET','POST'])
 def flash_card_set():
 
-    # conn = get_flash_cards_conn()
-    # eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
-    # conn.close()
-    
-    eqn = json.loads(session['eqn'])
+    conn = get_flash_cards_conn()
+    eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
+    conn.close()
+    print(type(eqn_set))
+    print(session['i'])
+    # return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn_set[5], ans="?", T_F="", eql_sign="=")
+    # eqn = json.loads(session['eqn'])
     # print('\n flash_card_set:')
     # print('type(eqn): ', type(eqn))
     # print("eqn = ", eqn)
@@ -285,28 +292,42 @@ def flash_card_set():
     # session['eqn'] = json.dumps(eqn_q.__dict__)   
    
     # print("i: ", i)
-    # eqn = eqn_set[i]
-    # print(eqn)
+    eqn = eqn_set[session['i']]
+    if session['i'] == 0:
+        session['old_eqn'] = {'num1': "", 'operator': "", 'num2': ""}
+    # else:
+    #     old_eqn = eqn_set[session['i']-1]
+    
+    
     if request.method == 'POST':
-        ans = request.form['ans']
+        # print("i before loop: ", session['i'])
+        # while i != 12:
+        #     eqn = eqn_set[session['i']]
+        #     print("i at start of loop: ", i)
+
+        # if request.method == 'POST':
+        session['ans'] = request.form['ans']
         
-        true_or_false = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(ans))
-        if true_or_false:
-            eql_sign = "="
+        session['true_or_false'] = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+        if session['true_or_false']:
+            session['eql_sign'] = "="
+            session['i']+=1
         else:
-            eql_sign = "&ne;"
-        
-        return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn, ans=ans, T_F=true_or_false, eql_sign=eql_sign)
+            session['eql_sign'] = "&ne;"
+
+        session['old_eqn'] = Question(eqn).__dict__
+        # return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn_set[session['i']-1], ans=ans, T_F=true_or_false, eql_sign=eql_sign)
         # return render_template('flash_card_set.html', chosen_name="", eqn=eqn, ans="")
-        # return redirect(url_for('flash_card_set'))
+        return redirect(url_for('flash_card_set'))
         # return redirect(url_for('flash_cards'))
         # return eqn_set[i+1]
         
-    return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn, ans="", T_F="")
+    return render_template('flash_card_set.html', chosen_cat=session['cat_name'].capitalize(), eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
+                           eql_sign="=", old_eqn=session['old_eqn'], old_ans=session['ans'], old_eql_sign=session['eql_sign'])
 
-@app.get("/update_flash_card_eqn")
-def update_flash_card_eqn():
-    i += 1 
+# @app.get("/update_flash_card_eqn")
+# def update_flash_card_eqn():
+#     i += 1 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
 def delete(user_id, row_id):
