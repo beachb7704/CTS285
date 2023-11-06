@@ -1,28 +1,31 @@
-To run the file, I have it set up if you run in visual studio code, type
+To run the file, I have it set up if you run in visual studio code, set up the virtual environment then type
 
 python run.py
 
-It will then run the file in debugging mode.
+
+It will then run the file in debugging mode so all you will need to do is press CTRL then click on the IP that populates.
 
 I have created a user account called testuser
 the password for the testuser account is password
 
-We can log in, log out, look at user profile, change username, change first name and last name and change password as well as user profile picture.
+If you want to test the registration link, you can create a username, first name, last name and password of your choice. You can then log in as that username.
 
-If a user tries to do anything that only someone with an account can do it will tell you that you need to log in. 
+We can log in, log out, look at user profile, change username, change first name and last name and change user profile picture.
 
-I have started working on the answer checker game and have it where the user can input their numbers as well as operator, but I still need to figure out the back end code to the page and add the check button or cancel button.
+If a user tries to do anything that only someone with an account can do before you log in, it will tell you that you need to log in. 
 
+The answer checker game is fully functional. A user can input any type of math question and then click on enter to find out if they got the question right or wrong. They can then input another question if they would like.
 
-The sign in page forgot password link currently doesn't work. I need to go in and set the page it will go to.
+Memory bank will have a user input a question, and it will only save the question to the database if the answer is correct to the question. We still need to figure out how to prevent a user from inputting a question that is already in the database to keep data redundancy down.
 
-Memory bank and user statistics links currently do not work since I haven't created the pages for them yet.
+We are currently working on the flash cards game. We can get the page to partially show, but we are working on the back end code to have everything populate.
 
 
 
 Everything below is what will need to be imported through a virtual environment.
-I am currently working on making the answer checker page but we can finally log in and play around with our account.
+
 I have the run.py file set so all you have to do is run the run.py file and it will start the program up and run in debug mode.
+
 The main file to run is the __init__.py file inside the app folder so it is pretty much app.py.
 
 
