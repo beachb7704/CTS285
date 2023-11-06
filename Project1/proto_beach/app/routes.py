@@ -9,10 +9,16 @@ import secrets
 import sqlite3
 from PIL import Image
 from app import Answer_Checker
-
+from app import Question_Class
 
 def get_mem_bank_conn():
     """This function initializes the memory_bank.db database."""
+    conn = sqlite3.connect('instance/mathmaticus.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def get_flash_cards_conn():
+    """This function initializes the flash_cards.db database."""
     conn = sqlite3.connect('instance/mathmaticus.db')
     conn.row_factory = sqlite3.Row
     return conn
@@ -200,9 +206,49 @@ def check_ans():
 @app.route("/game/flash_cards")
 @login_required
 def flash_cards():
-    return render_template('flash_cards.html', title='Flash Cards')
+    conn = get_flash_cards_conn()
+    categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
+    conn.close()
 
+    if request.method == 'POST':
+        
+        session['cat_name'] = request.form['flash_card_set']
+        
+        session['i'] = 0
+        session['true_or_false'] = ""
+        session['eql_sign'] = ""
+        session['ans'] = ""
+        return redirect(url_for('flash_card_set'))
 
+    return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
+
+@app.route('/flash_card_set', methods = ['GET','POST'])
+@login_required
+def flash_card_set():
+
+    conn = get_flash_cards_conn()
+    eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
+    conn.close()
+    
+    eqn = eqn_set[session['i']]
+    if session['i'] == 0:
+        session['old_eqn'] = {'num1': "", 'operator': "", 'num2': ""}
+        
+    if request.method == 'POST':
+        session['ans'] = request.form['ans']
+        
+        session['true_or_false'] = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+        if session['true_or_false']:
+            session['eql_sign'] = "="
+            session['i']+=1
+        else:
+            session['eql_sign'] = "&ne;"
+
+        session['old_eqn'] = Question_Class.Question(eqn).__dict__
+        return redirect(url_for('flash_card_set'))
+        
+    return render_template('flash_card_set.html', chosen_cat=session['cat_name'].capitalize(), eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
+                           eql_sign="=", old_eqn=session['old_eqn'], old_ans=session['ans'], old_eql_sign=session['eql_sign'])
 
 #####################
 # Memory Bank Route #
