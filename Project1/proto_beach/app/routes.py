@@ -9,7 +9,7 @@ import secrets
 import sqlite3
 from PIL import Image
 from app import Answer_Checker
-from app import Question_Class
+from app.Question_Class import Question
 
 def get_mem_bank_conn():
     """This function initializes the memory_bank.db database."""
@@ -50,10 +50,6 @@ def save_picture(form_picture):
 @app.route("/home")
 def home():
     return render_template('home.html')
-
-
-
-
  
 #############################
 # Account Information Route #
@@ -186,7 +182,8 @@ def check_ans():
         elif not int(ans) and ans != 0:
             flash('The answer is NOT an integer!')
         else:
-            true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            Ans_Chk = Answer_Checker.Answer_Checker() # modle.class() init
+            true_or_false = Ans_Chk.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
                 note = "You guessed the correct answer."
@@ -203,12 +200,14 @@ def check_ans():
 # Flash Card Route #
 ####################
 # This will send the user to the Flash Card game 
-@app.route("/game/flash_cards")
+@app.route("/game/flash_cards", methods = ['GET','POST'])
 @login_required
 def flash_cards():
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
+    
+    print("categories: ", categories)
 
     if request.method == 'POST':
         
@@ -236,15 +235,17 @@ def flash_card_set():
         
     if request.method == 'POST':
         session['ans'] = request.form['ans']
-        
-        session['true_or_false'] = Answer_Checker.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+        print(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+        print()
+        ans = Answer_Checker.Answer_Checker() # modle.class() init
+        session['true_or_false'] = ans.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
         if session['true_or_false']:
             session['eql_sign'] = "="
             session['i']+=1
         else:
             session['eql_sign'] = "&ne;"
 
-        session['old_eqn'] = Question_Class.Question(eqn).__dict__
+        session['old_eqn'] = Question(eqn).__dict__
         return redirect(url_for('flash_card_set'))
         
     return render_template('flash_card_set.html', chosen_cat=session['cat_name'].capitalize(), eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
