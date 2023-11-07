@@ -293,7 +293,8 @@ def mem_bank_ans():
             flash('The answer is NOT an integer!')
         else:
             # Work on adding the userid, question and answer to database here!!!!!
-            true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            Ans_Chk = Answer_Checker.Answer_Checker() # modle.class() init
+            true_or_false = Ans_Chk.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 conn = get_mem_bank_conn()
                 conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
