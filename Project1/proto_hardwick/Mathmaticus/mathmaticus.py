@@ -330,14 +330,14 @@ def flash_card_set():
 #     i += 1 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
-def delete(user_id, row_id):
+def delete(session['user_id'], row_id):
     conn = get_mem_bank_conn()
 
     cursor_obj = conn.cursor()
-    eqn = cursor_obj.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(user_id, row_id)).fetchone()
+    eqn = cursor_obj.execute('SELECT * FROM memory_bank WHERE user_id = ? AND row_id = ?',(session['user_id'], row_id)).fetchone()
     eqn_str = str(eqn[3]) + eqn[4] + str(eqn[5]) + "=" + str(eqn[6])
     
-    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (user_id, row_id,))
+    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (session['user_id'], row_id,))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(eqn_str))
@@ -349,9 +349,10 @@ def delete_flash_cards(row_id):
 
     cursor_obj = conn.cursor()
     eqn = cursor_obj.execute('SELECT * FROM flash_cards WHERE row_id = ?',(row_id,)).fetchone()
-    eqn_str = str(eqn[3]) + eqn[4] + str(eqn[5]) + "=" + str(eqn[6])
+    eqn_q = Question(eqn)
+    eqn_str = str(eqn_q.num1) + eqn_q.operator + str(eqn_q.num2) + "=" + str(eqn_q.ans)
     
-    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (user_id, row_id,))
+    conn.execute('DELETE FROM memory_bank WHERE user_id = ? AND row_id = ?', (session['user_id'], row_id,))
     conn.commit()
     conn.close()
     flash('"{}" was successfully deleted!'.format(eqn_str))
