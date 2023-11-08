@@ -118,10 +118,22 @@ def login():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             #next_page = request.args.get('next')
-            return render_template ('welcome.html') 
+            return render_template ('welcome.html', title = 'Welcome') 
         else:
             flash("Either username or password was typed in incorrectly. Please try agian.")
     return render_template('login.html', title = 'Login', form = form)
+
+
+#################
+# Welcome Route #
+#################
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/welcome")
+@login_required
+def welcome():
+    return render_template('welcome.html', title='Welcome')
+
+
 
 
 
