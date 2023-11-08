@@ -50,9 +50,10 @@ def save_picture(form_picture):
 # have the greeting change after login using conditional if statement and passing
 # test as a variable.
 @app.route("/")
-@app.route("/home")
 def home():
     return render_template('home.html')
+#@app.route("/home")
+
  
 #############################
 # Account Information Route #
@@ -116,8 +117,8 @@ def login():
         #studentid = User.query.filter_by(id=id.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-            return redirect (next_page) if next_page else redirect(url_for('home'))
+            #next_page = request.args.get('next')
+            return render_template ('welcome.html') 
         else:
             flash("Either username or password was typed in incorrectly. Please try agian.")
     return render_template('login.html', title = 'Login', form = form)
@@ -144,15 +145,6 @@ def checker():
     return render_template('checker.html', title='Answer Checker')
 
 
-
-
-
-
-
-
-
-
-
 #########################
 # Change Password Route #
 #########################
@@ -166,25 +158,15 @@ def change_password():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User.query.filter_by(username=form.username.data).first()
-        #studentid = User.query.filter_by(id=id.data).first()
         if user:
             print("username exists. Time to change in database")
             user = User(username=form.username.data, password = hashed_password)
             db.session.commit()
             flash("Your password has been successfully updated", 'success')
             return redirect(url_for('change_password'))
-            #login_user(user, remember=form.remember.data)
-            #next_page = request.args.get('next')
-            #return redirect (next_page) if next_page else redirect(url_for('home'))
         else:
             flash("The Username does not exist. Please try agian.")
     return render_template('change_password.html', title = 'Change Password', form = form)
-
-
-
-
-
-
 
 
 
@@ -197,10 +179,6 @@ def change_password():
 @login_required
 def mem_bank_game():
     return render_template('mem_bank_game.html', title='Memory Bank Game')
-
-
-
-
 
 
 
@@ -313,11 +291,13 @@ def flash_card_set():
     return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
                            eql_sign="=", old_eqn=session['old_eqn'], old_ans=session['ans'], old_eql_sign=session['eql_sign'])
 
+
+
 #####################
 # Memory Bank Route #
 #####################
 # This will send the user to the Memory Bank Game 
-@app.route("/memory_bank")
+@app.route("/memory_bank/input")
 @login_required
 def memory_bank():
     return render_template('mem_bank.html', title='Memory Bank')
