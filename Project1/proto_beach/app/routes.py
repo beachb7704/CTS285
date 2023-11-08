@@ -46,6 +46,9 @@ def save_picture(form_picture):
 
 # This is a default webpage route for our root or welcome page.
 # The render_template returns our home.html webpage.
+#
+# have the greeting change after login using conditional if statement and passing
+# test as a variable.
 @app.route("/")
 @app.route("/home")
 def home():
