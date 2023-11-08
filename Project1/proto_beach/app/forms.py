@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask import flash
 from flask_wtf.file import FileField, FileAllowed
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
@@ -75,4 +76,12 @@ class Memory_Bank(FlaskForm):
     ans = IntegerField('ans', validators=[DataRequired()])
     submit = SubmitField('Insert to Memory')
     
+
+########################
+# Change Password Form #
+########################
+class ChangePassword(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=5, max=20)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Change Password')
     

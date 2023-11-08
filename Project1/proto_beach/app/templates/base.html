@@ -24,14 +24,17 @@ not be any redundant code. What shows here shows on all pages.-->
     <body>
         <header class="site-header">
             <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+              <nav class="navbar">
+                <span class="navbar-brand mb-0 h1">Mathmaticus</span>
+              </nav>
               <div class="container">
-                <a class="navbar-brand mr-4" href="{{url_for('home')}}">Mathmaticus</a>
+                <a class="navbar-brand mr-4" href="{{url_for('home')}}">User Statistics</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarToggle">
                   <div class="navbar-nav mr-auto">
-                    <a class="navbar-brand mr-4" href="#">Place Setting of no use as of now</a>
+                    <a class="navbar-brand mr-4" href="#"></a>
                   </div>
                   <!-- Navbar Right Side -->
                   <!--This will verify if a user is logged in and if they are, the login and register link will disappear and logout will appear.-->

@@ -1,7 +1,7 @@
 # Importing flask
 import os
 from flask import Flask, render_template, url_for, flash, redirect, request, session
-from app.forms import Registration, Login, UpdateAccount, Memory_Bank
+from app.forms import Registration, Login, UpdateAccount, Memory_Bank, ChangePassword
 from app.models import User, Student_Statistics, Memory
 from app import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -71,6 +71,7 @@ def accountinfo():
         flash("Your account has been successfully updated", 'success')
         return redirect(url_for('accountinfo'))
     elif request.method == 'GET':
+        #This will prepopulate the fields to change
         form.username.data = current_user.username
         form.first_name.data = current_user.firstname
         form.last_name.data = current_user.lastname
@@ -141,13 +142,75 @@ def checker():
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #########################
 # Change Password Route #
 #########################
 # This is to allow the user to change their password.
-@app.route("/user_info/change_password")
+@app.route("/user_info/change_password", methods = ['GET', 'POST'])
 def change_password():
-    return render_template('change_password.html', title='Change Password')
+    # This will check to see if current user is logged in and redirect them back to the welcome page if Login link is clicked
+    #if current_user.is_authenticated:
+    #    return redirect(url_for('home'))
+    form = ChangePassword()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user = User.query.filter_by(username=form.username.data).first()
+        #studentid = User.query.filter_by(id=id.data).first()
+        if user:
+            print("username exists. Time to change in database")
+            #login_user(user, remember=form.remember.data)
+            #next_page = request.args.get('next')
+            #return redirect (next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash("The Username does not exist. Please try agian.")
+    return render_template('change_password.html', title = 'Change Password', form = form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
