@@ -146,13 +146,6 @@ def checker():
 
 
 
-
-
-
-
-
-
-
 #########################
 # Change Password Route #
 #########################
@@ -165,11 +158,21 @@ def change_password():
     form = ChangePassword()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        print("pw afer hash: ", hashed_password)
         user = User.query.filter_by(username=form.username.data).first()
         #studentid = User.query.filter_by(id=id.data).first()
         if user:
+            temp_pw = hashed_password
+            # debug
             print("username exists. Time to change in database")
-            user = User(username=form.username.data, password = hashed_password)
+            # user=User() creates a new db object and doesn't change the existing one
+            #user = User(username=form.username.data, password = hashed_password)
+            print("user: ",user.username)
+            # reference sqlalchemy docs on ORM and https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/queries/#insert-update-delete
+            user.password = hashed_password # will update DB on flush
+            if user in db.session.dirty:
+                print("object", user, "will be updated on commit")
+            #debug end
             db.session.commit()
             flash("Your password has been successfully updated", 'success')
             return redirect(url_for('change_password'))
@@ -183,12 +186,6 @@ def change_password():
 
 
 
-
-
-
-
-
-
 ##########################
 # Memory Bank Game Route #
 ##########################
@@ -197,19 +194,6 @@ def change_password():
 @login_required
 def mem_bank_game():
     return render_template('mem_bank_game.html', title='Memory Bank Game')
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
