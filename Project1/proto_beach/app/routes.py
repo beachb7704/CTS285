@@ -46,6 +46,9 @@ def save_picture(form_picture):
 
 # This is a default webpage route for our root or welcome page.
 # The render_template returns our home.html webpage.
+#
+# have the greeting change after login using conditional if statement and passing
+# test as a variable.
 @app.route("/")
 @app.route("/home")
 def home():
@@ -269,8 +272,6 @@ def flash_cards():
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
-    
-    print("categories: ", categories)
 
     if request.method == 'POST':
         
@@ -311,7 +312,7 @@ def flash_card_set():
         session['old_eqn'] = Question(eqn).__dict__
         return redirect(url_for('flash_card_set'))
         
-    return render_template('flash_card_set.html', chosen_cat=session['cat_name'].capitalize(), eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
+    return render_template('flash_card_set.html', chosen_cat=session['cat_name'], eqn=eqn_set[session['i']], ans="?", T_F=session['true_or_false'], 
                            eql_sign="=", old_eqn=session['old_eqn'], old_ans=session['ans'], old_eql_sign=session['eql_sign'])
 
 #####################
@@ -358,7 +359,8 @@ def mem_bank_ans():
             flash('The answer is NOT an integer!')
         else:
             # Work on adding the userid, question and answer to database here!!!!!
-            true_or_false = Answer_Checker.Answer_Checker.right_or_wrong_var(num1,math_op,num2,int(ans))
+            Ans_Chk = Answer_Checker.Answer_Checker() # modle.class() init
+            true_or_false = Ans_Chk.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 conn = get_mem_bank_conn()
                 conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
