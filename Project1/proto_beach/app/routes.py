@@ -169,6 +169,10 @@ def change_password():
         #studentid = User.query.filter_by(id=id.data).first()
         if user:
             print("username exists. Time to change in database")
+            user = User(username=form.username.data, password = hashed_password)
+            db.session.commit()
+            flash("Your password has been successfully updated", 'success')
+            return redirect(url_for('change_password'))
             #login_user(user, remember=form.remember.data)
             #next_page = request.args.get('next')
             #return redirect (next_page) if next_page else redirect(url_for('home'))
