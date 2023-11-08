@@ -175,11 +175,6 @@ def change_password():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             temp_pw = hashed_password
-            # debug
-            print("username exists. Time to change in database")
-            # user=User() creates a new db object and doesn't change the existing one
-            #user = User(username=form.username.data, password = hashed_password)
-            print("user: ",user.username)
             # reference sqlalchemy docs on ORM and https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/queries/#insert-update-delete
             user.password = hashed_password # will update DB on flush
             if user in db.session.dirty:
