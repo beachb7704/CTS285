@@ -198,7 +198,7 @@ def mem_bank_add():
                 # add get_user_id to import the user_id
                 conn = get_mem_bank_conn()
                 conn.execute("INSERT INTO memory_bank (user_id, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
-                             (1, int(num1), math_op, int(num2), int(ans)))
+                             (session['user_id'], int(num1), math_op, int(num2), int(ans)))
                 conn.commit()
                 conn.close()
                 eqn = num1 + " " + math_op + " " + num2 + " = " + ans 
@@ -209,7 +209,6 @@ def mem_bank_add():
 
     return render_template('mem_bank_add.html').format(feedback="", eqn = "", equations = "")
 
-# store variable in session
 
 @app.route('/flash_cards', methods = ['GET','POST'])
 def flash_cards():
@@ -330,7 +329,7 @@ def flash_card_set():
 #     i += 1 
 
 @app.route('/<int:user_id>/<int:row_id>/delete', methods=('POST',))
-def delete(session['user_id'], row_id):
+def delete(row_id):
     conn = get_mem_bank_conn()
 
     cursor_obj = conn.cursor()
