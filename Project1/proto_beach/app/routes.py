@@ -51,6 +51,7 @@ def save_picture(form_picture):
 # test as a variable.
 @app.route("/")
 def home():
+    session['set_complete'] = ""
     return render_template('home.html')
 #@app.route("/home")
 
@@ -255,6 +256,7 @@ def check_ans():
 @app.route("/game/flash_cards", methods = ['GET','POST'])
 @login_required
 def flash_cards():
+    print("set complete?  ", session['set_complete'])
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
@@ -269,8 +271,12 @@ def flash_cards():
         session['ans'] = ""
         return redirect(url_for('flash_card_set'))
 
-    return render_template('flash_cards.html', categories=categories, chosen_cat="", eqn="")
+    return render_template('flash_cards.html', categories=categories, set_complete=session['set_complete'])
 
+
+########################
+# Flash Card Set Route #
+########################
 @app.route('/flash_card_set', methods = ['GET','POST'])
 @login_required
 def flash_card_set():
@@ -279,7 +285,14 @@ def flash_card_set():
     eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
     conn.close()
     
-    eqn = eqn_set[session['i']]
+    print("number of eqns in set: ", len(eqn_set))
+    print('i: ', session['i'])
+    if session['i'] > len(eqn_set)-1:
+        session['set_complete'] = "You have completed " + session['cat_name'] + "!"
+        return redirect(url_for('flash_cards'))
+    else:
+        eqn = eqn_set[session['i']]
+
     if session['i'] == 0:
         session['old_eqn'] = {'num1': "", 'operator': "", 'num2': ""}
         
