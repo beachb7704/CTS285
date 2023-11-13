@@ -10,6 +10,7 @@ import sqlite3
 from PIL import Image
 from app import Answer_Checker
 from app.Question_Class import Question
+from werkzeug.exceptions import abort
 
 def get_mem_bank_conn():
     """This function initializes the memory_bank.db database."""
@@ -36,6 +37,15 @@ def save_picture(form_picture):
     i.save(picture_path)
     
     return picture_fn
+
+def get_eqnset(user_id):
+    """This function retrieves all of the equations from the memory bank for a given user"""
+    conn = get_mem_bank_conn()
+    eqnset = conn.execute('SELECT * FROM memory_bank WHERE user_id = ?',(user_id,)).fetchall()
+    conn.close()
+    if eqnset is None:
+        abort(404)
+    return eqnset
 
 
 # Routes are what we create to move to other webpages.
@@ -260,6 +270,11 @@ def flash_cards():
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     conn.close()
+    
+    for i in range(len(categories)):
+        categories[i] = categories[i]['category']
+        
+    categories.insert(0, "Memory Bank Set")
 
     if request.method == 'POST':
         
@@ -281,9 +296,13 @@ def flash_cards():
 @login_required
 def flash_card_set():
 
-    conn = get_flash_cards_conn()
-    eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
-    conn.close()
+    if session['cat_name'] == 'Memory Bank Set':
+        eqn_set = get_eqnset(current_user.id)
+        print('Mem Bank set: ', eqn_set)
+    else:
+        conn = get_flash_cards_conn()
+        eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
+        conn.close()
     
     print("number of eqns in set: ", len(eqn_set))
     print('i: ', session['i'])

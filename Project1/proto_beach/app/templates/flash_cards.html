@@ -12,7 +12,7 @@
     <label for="flash_card_set">Choose a category:</label> 
     <select name="flash_card_set" id="flash_card_set" required> 
         {% for name in categories %}
-            <option value="{{ name['category'] }}">{{ name['category'] }}</option>
+            <option value="{{ name }}">{{ name }}</option>
         {% endfor %}
     </select>
     <div class="form-group">
