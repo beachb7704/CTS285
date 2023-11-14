@@ -207,18 +207,6 @@ def change_password():
 
 
 
-##########################
-# Memory Bank Game Route #
-##########################
-# This will send the user to the Memory Bank Game 
-@app.route("/memory_bank/game")
-@login_required
-def mem_bank_game():
-    return render_template('mem_bank_game.html', title='Memory Bank Game')
-
-
-
-
 
 ###################
 # check_ans Route #
