@@ -3,11 +3,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+import webview
 
 
 
 # Setting this to an instance of a flask class (__name__) means just the name of the module
 app = Flask(__name__)
+window = webview.create_window('Mathmaticus', app)
 
 # setting the secret key to prevent cross site scripting.
 # This will be hidden before site goes live.

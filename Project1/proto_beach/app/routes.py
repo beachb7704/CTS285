@@ -379,7 +379,7 @@ def mem_bank_ans():
             true_or_false = Ans_Chk.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 conn = get_mem_bank_conn()
-                ALTER
+                #ALTER
                 conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
                              (studentid, int(num1), math_op, int(num2), int(ans)))
                 conn.commit()
