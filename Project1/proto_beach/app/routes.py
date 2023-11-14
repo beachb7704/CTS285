@@ -145,7 +145,13 @@ def welcome():
     return render_template('welcome.html', title='Welcome')
 
 
-
+###############
+# About Route #
+###############
+# This is to log the user out of the current session so another user can log in. 
+@app.route("/about")
+def about():
+    return render_template('about.html', title="Luna's Journey")
 
 
 ################
@@ -298,7 +304,6 @@ def flash_card_set():
 
     if session['cat_name'] == 'Memory Bank Set':
         eqn_set = get_eqnset(current_user.id)
-        print('Mem Bank set: ', eqn_set)
     else:
         conn = get_flash_cards_conn()
         eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
@@ -311,16 +316,19 @@ def flash_card_set():
         return redirect(url_for('flash_cards'))
     else:
         eqn = eqn_set[session['i']]
+        # print('eqn: ', Question(eqn).__dict__)
+        print('eqn: ', eqn)
+        print('eqn: '+ str(eqn['num1']) + str(eqn['operator']) + str(eqn['num2']) + str(eqn['ans']))
 
     if session['i'] == 0:
         session['old_eqn'] = {'num1': "", 'operator': "", 'num2': ""}
         
     if request.method == 'POST':
         session['ans'] = request.form['ans']
-        print(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
-        print()
+
         ans = Answer_Checker.Answer_Checker() # modle.class() init
         session['true_or_false'] = ans.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+
         if session['true_or_false']:
             session['eql_sign'] = "="
             session['i']+=1
@@ -383,6 +391,7 @@ def mem_bank_ans():
             true_or_false = Ans_Chk.right_or_wrong_var(num1,math_op,num2,int(ans))
             if true_or_false:
                 conn = get_mem_bank_conn()
+                ALTER
                 conn.execute("INSERT INTO memory_bank (user_id, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
                              (studentid, int(num1), math_op, int(num2), int(ans)))
                 conn.commit()

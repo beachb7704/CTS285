@@ -20,10 +20,14 @@ class Question():
         MATH_OP = 4
         NUM2 = 5
         ANS = 6
-        self.num1 = row[NUM1]
-        self.operator = row[MATH_OP]
-        self.num2 = row[NUM2]
-        self.ans = row[ANS]
+        # self.num1 = row[NUM1]
+        # self.operator = row[MATH_OP]
+        # self.num2 = row[NUM2]
+        # self.ans = row[ANS]
+        self.num1 = row['num1']
+        self.operator = row['operator']
+        self.num2 = row['num2']
+        self.ans = row['ans']
         #self.quest_true = #something
 
     # Getters    

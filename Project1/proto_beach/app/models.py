@@ -62,7 +62,7 @@ class Memory(db.Model, UserMixin):
     #Foreign key to link users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     num1 = db.Column(db.Integer, nullable = False)
-    math_op = db.Column(db.String(1), nullable = False)
+    operator = db.Column(db.String(1), nullable = False)
     num2 = db.Column(db.Integer, nullable = False)
     ans = db.Column(db.Integer, nullable = False)
        
