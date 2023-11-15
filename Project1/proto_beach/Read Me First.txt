@@ -3,7 +3,7 @@ To run the file, I have it set up if you run in visual studio code, set up the v
 python run.py
 
 
-It will then run the file in debugging mode so all you will need to do is press CTRL then click on the IP that populates.
+It will run the file as a stand-alone program.
 
 I have created a user account called testuser
 the password for the testuser account is password
@@ -12,28 +12,34 @@ If you want to test the registration link, you can create a username, first name
 
 We can log in, log out, look at user profile, change username, change first name and last name and change user profile picture.
 
+We can also change the password either before you log in or after you log in.
+
 If a user tries to do anything that only someone with an account can do before you log in, it will tell you that you need to log in. 
 
-The answer checker game is fully functional. A user can input any type of math question and then click on enter to find out if they got the question right or wrong. They can then input another question if they would like.
+The answer checker game is fully functional. A user can input any math question and then click on enter to find out if they got the question right or wrong. They can then input another question if they would like.
 
-Memory bank will have a user input a question, and it will only save the question to the database if the answer is correct to the question. We still need to figure out how to prevent a user from inputting a question that is already in the database to keep data redundancy down.
+Memory bank input will have a user input a question, and it will only save the question to the database if the answer is correct to the question. We still need to figure out how to prevent a user from inputting a question that is already in the database to keep data redundancy down.
 
-We are currently working on the flash cards game. We can get the page to partially show, but we are working on the back end code to have everything populate.
+The flash game works, and the user can select the times tables, addition tables, and subtraction tables. The memory bank game can also be played through this page.
 
 
 
 Everything below is what will need to be imported through a virtual environment.
 
-I have the run.py file set so all you have to do is run the run.py file and it will start the program up and run in debug mode.
+I have the run.py file set so all you have to do is run the run.py file and it will run as a stand alone program.
 
 The main file to run is the __init__.py file inside the app folder so it is pretty much app.py.
 
 
 
 
+altgraph==0.17.4
 bcrypt==4.0.1
 blinker==1.6.3
+bottle==0.12.25
+cffi==1.16.0
 click==8.1.7
+clr-loader==0.2.6
 colorama==0.4.6
 Flask==3.0.0
 Flask-Bcrypt==1.0.1
@@ -44,7 +50,16 @@ greenlet==3.0.0
 itsdangerous==2.1.2
 Jinja2==3.1.2
 MarkupSafe==2.1.3
+packaging==23.2
+pefile==2023.2.7
 Pillow==10.0.1
+proxy-tools==0.1.0
+pycparser==2.21
+pyinstaller==6.2.0
+pyinstaller-hooks-contrib==2023.10
+pythonnet==3.0.3
+pywebview==4.4.1
+pywin32-ctypes==0.2.2
 SQLAlchemy==2.0.21
 tabulate==0.9.0
 typing_extensions==4.8.0
