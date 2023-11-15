@@ -260,7 +260,7 @@ def check_ans():
 @app.route("/game/flash_cards", methods = ['GET','POST'])
 @login_required
 def flash_cards():
-    print("set complete?  ", session['set_complete'])
+    # print("set complete?  ", session['set_complete'])
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
     # temp = conn.execute('ALTER TABLE flash_cards RENAME COLUMN operator TO math_op')
@@ -297,6 +297,7 @@ def flash_card_set():
         conn = get_flash_cards_conn()
         eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
         conn.close()
+        print("blah")
     
     # print("number of eqns in set: ", len(eqn_set))
     # print('i: ', session['i'])
