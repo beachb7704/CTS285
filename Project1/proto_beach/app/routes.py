@@ -306,16 +306,16 @@ def flash_card_set():
         eqn = eqn_set[session['i']]
         # print('eqn: ', Question(eqn).__dict__)
         print('eqn: ', eqn)
-        print('eqn: '+ str(eqn['num1']) + str(eqn['operator']) + str(eqn['num2']) + str(eqn['ans']))
+        print('eqn: '+ str(eqn['num1']) + str(eqn['math_op']) + str(eqn['num2']) + str(eqn['ans']))
 
     if session['i'] == 0:
-        session['old_eqn'] = {'num1': "", 'operator': "", 'num2': ""}
+        session['old_eqn'] = {'num1': "", 'math_op': "", 'num2': ""}
         
     if request.method == 'POST':
         session['ans'] = request.form['ans']
 
         ans = Answer_Checker.Answer_Checker() # modle.class() init
-        session['true_or_false'] = ans.right_or_wrong_var(eqn['num1'], eqn['operator'], eqn['num2'], int(session['ans']))
+        session['true_or_false'] = ans.right_or_wrong_var(eqn['num1'], eqn['math_op'], eqn['num2'], int(session['ans']))
 
         if session['true_or_false']:
             session['eql_sign'] = "="

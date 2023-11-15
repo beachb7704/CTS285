@@ -5,7 +5,7 @@ CREATE TABLE flash_cards (
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     category TEXT NOT NULL,
     num1 INTEGER NOT NULL,
-    operator TEXT NOT NULL,
+    math_op TEXT NOT NULL,
     num2 INTEGER NOT NULL,
     ans INTEGER NOT NULL
 );

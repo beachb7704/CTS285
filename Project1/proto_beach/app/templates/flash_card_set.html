@@ -7,7 +7,7 @@
     <h2>{{ chosen_cat }}</h2>
 </div>
     {% autoescape off %}
-    <h3>{{ eqn['num1'] }}{{ eqn['operator'] }}{{ eqn['num2'] }}{{ eql_sign }}{{ ans }}</h3>
+    <h3>{{ eqn['num1'] }}{{ eqn['math_op'] }}{{ eqn['num2'] }}{{ eql_sign }}{{ ans }}</h3>
     {% endautoescape %}
     <form method="post">
         <div class="form-group">
@@ -23,6 +23,6 @@
 
     <h2>{{ T_F }}</h2>
     {% autoescape off %}
-    <h3>{{ old_eqn['num1'] }}{{ old_eqn['operator'] }}{{ old_eqn['num2'] }}{{ old_eql_sign }}{{ old_ans }}</h3>
+    <h3>{{ old_eqn['num1'] }}{{ old_eqn['math_op'] }}{{ old_eqn['num2'] }}{{ old_eql_sign }}{{ old_ans }}</h3>
     {% endautoescape %}
 {% endblock base %}

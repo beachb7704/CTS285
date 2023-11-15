@@ -15,7 +15,7 @@ for i in range(11):
 # initialize the flash_cards.db with times 0-10 tables
 for i in range(11):
     for j in range(11):
-        cur.execute("INSERT INTO flash_cards (category, num1, operator, num2, ans) VALUES (?, ?, ?, ?, ?)",
+        cur.execute("INSERT INTO flash_cards (category, num1, math_op, num2, ans) VALUES (?, ?, ?, ?, ?)",
                 (cat_names[i], i, '*', j, j*i)
                 )
 

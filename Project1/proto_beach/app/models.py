@@ -62,7 +62,7 @@ class Memory(db.Model, UserMixin):
     #Foreign key to link users (refer to primary key of the user)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     num1 = db.Column(db.Integer, nullable = False)
-    operator = db.Column(db.String(1), nullable = False)
+    math_op = db.Column(db.String(1), nullable = False)
     num2 = db.Column(db.Integer, nullable = False)
     ans = db.Column(db.Integer, nullable = False)
        
@@ -78,7 +78,7 @@ class FlashCards(db.Model):
     #created_date = Column(DateTime, default=datetime.datetime.utcnow)
     category = db.Column(db.String(100), nullable=False)
     num1 = db.Column(db.Integer, nullable=False)
-    operator = db.Column(db.String(1), unique=True, nullable=False)
+    math_op = db.Column(db.String(1), unique=True, nullable=False)
     num2 = db.Column(db.Integer, nullable=False)
     ans = db.Column(db.Integer, nullable=False)
 

@@ -1,10 +1,10 @@
 from tabulate import tabulate
 
 class Question():
-    def __init__(self, num1, operator, num2, ans, T_F):
+    def __init__(self, num1, math_op, num2, ans, T_F):
 
         self.num1 = int(num1)
-        self.operator = operator
+        self.math_op = math_op
         self.num2 = int(num2)
         self.ans = int(ans)
         self.quest_true = bool(T_F)
@@ -21,11 +21,11 @@ class Question():
         NUM2 = 5
         ANS = 6
         # self.num1 = row[NUM1]
-        # self.operator = row[MATH_OP]
+        # self.math_op = row[MATH_OP]
         # self.num2 = row[NUM2]
         # self.ans = row[ANS]
         self.num1 = row['num1']
-        self.operator = row['operator']
+        self.math_op = row['math_op']
         self.num2 = row['num2']
         self.ans = row['ans']
         #self.quest_true = #something
@@ -34,8 +34,8 @@ class Question():
     def get_num1(self):
         return self.num1
     
-    def get_operator(self):
-        return self.operator
+    def get_math_op(self):
+        return self.math_op
     
     def get_num2(self):
         return self.num2
@@ -51,8 +51,8 @@ class Question():
     def set_num1(self, num1):
         self.num1 = num1
         
-    def set_operator(self, operator):
-        self.operator = operator
+    def set_math_op(self, math_op):
+        self.math_op = math_op
         
     def set_num2(self, num2):
         self.num2 = num2
@@ -67,7 +67,7 @@ class Question():
     def __repr__(self):
 
         return tabulate([["1st Number:", str(self.num1)],
-                          ["Operator:", self.operator],
+                          ["math_op:", self.math_op],
                           ["2nd Number:", str(self.num2)],
                           ["Answer:", str(self.ans)]])
 
