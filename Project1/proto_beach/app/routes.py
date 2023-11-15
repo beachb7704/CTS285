@@ -263,6 +263,7 @@ def flash_cards():
     print("set complete?  ", session['set_complete'])
     conn = get_flash_cards_conn()
     categories = conn.execute('SELECT DISTINCT category FROM flash_cards').fetchall()
+    # temp = conn.execute('ALTER TABLE flash_cards RENAME COLUMN operator TO math_op')
     conn.close()
     
     for i in range(len(categories)):
@@ -297,16 +298,16 @@ def flash_card_set():
         eqn_set = conn.execute('SELECT * FROM flash_cards WHERE category = ?',(session['cat_name'],)).fetchall()
         conn.close()
     
-    print("number of eqns in set: ", len(eqn_set))
-    print('i: ', session['i'])
+    # print("number of eqns in set: ", len(eqn_set))
+    # print('i: ', session['i'])
     if session['i'] > len(eqn_set)-1:
         session['set_complete'] = "You have completed " + session['cat_name'] + "!"
         return redirect(url_for('flash_cards'))
     else:
         eqn = eqn_set[session['i']]
         # print('eqn: ', Question(eqn).__dict__)
-        print('eqn: ', eqn)
-        print('eqn: '+ str(eqn['num1']) + str(eqn['math_op']) + str(eqn['num2']) + str(eqn['ans']))
+        # print('eqn: ', eqn)
+        # print('eqn: '+ str(eqn['num1']) + str(eqn['math_op']) + str(eqn['num2']) + str(eqn['ans']))
 
     if session['i'] == 0:
         session['old_eqn'] = {'num1': "", 'math_op': "", 'num2': ""}
